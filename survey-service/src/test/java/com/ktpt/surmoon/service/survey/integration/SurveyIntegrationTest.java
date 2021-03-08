@@ -1,4 +1,4 @@
-package com.ktpt.surmoon.service.survey.acceptance;
+package com.ktpt.surmoon.service.survey.integration;
 
 import com.ktpt.surmoon.service.survey.adapter.presentation.SurveyController;
 import com.ktpt.surmoon.service.survey.adapter.presentation.advice.ErrorResponse;
