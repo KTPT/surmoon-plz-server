@@ -54,6 +54,7 @@ public class SurveyIntegrationTest extends IntegrationTest {
     void updateSurvey() {
         // given
         Survey saved = findAnySurvey();
+
         // when
         SurveyRequest request = new SurveyRequest("changed", saved.getCreatorId());
         SurveyResponse response = put(request, SurveyController.SURVEY_URI + "/" + saved.getId(), SurveyResponse.class);
@@ -81,7 +82,7 @@ public class SurveyIntegrationTest extends IntegrationTest {
                     ErrorResponse response = putFails(request, SurveyController.SURVEY_URI + "/" + saved.getId());
 
                     // then
-                    assertThat(response.getMessages()).containsExactly("같은 내용으로 수정할 수 없습니다.");
+                    assertThat(response.getMessages()).containsExactly("같은 title로 수정할 수 없습니다.");
                 }),
                 DynamicTest.dynamicTest("creatorId가 다를때 BadRequest", () -> {
                     // when

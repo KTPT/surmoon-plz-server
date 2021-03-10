@@ -19,7 +19,7 @@ public class SurveyService {
 
     public SurveyResponse update(Long id, SurveyRequest request) {
         Survey survey = findById(id);
-        survey.updateWhoCreator(request.getTitle(), request.getCreatorId());
+        survey.changeTitleWhoCreator(request.getTitle(), request.getCreatorId());
 
         return SurveyResponse.from(surveyRepository.save(survey));
     }

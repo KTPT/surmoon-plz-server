@@ -29,4 +29,11 @@ public class ExceptionController {
 
         return ResponseEntity.badRequest().body(new ErrorResponse(errorMessages));
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> handle(RuntimeException e) {
+        List<String> errorMessages = Collections.singletonList(e.getMessage());
+        return ResponseEntity.badRequest().body(new ErrorResponse(errorMessages));
+    }
+
 }

@@ -3,7 +3,6 @@ package com.ktpt.surmoon.service.survey.adapter.presentation;
 import com.ktpt.surmoon.service.survey.application.SurveyService;
 import com.ktpt.surmoon.service.survey.application.dto.SurveyRequest;
 import com.ktpt.surmoon.service.survey.application.dto.SurveyResponse;
-import com.ktpt.surmoon.service.survey.domain.model.survey.Survey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +26,8 @@ public class SurveyController {
                 .body(saved);
     }
 
-    /**
-     * @param request's title, creatorId will be verified by domain (NO @Valid)
-     * @see Survey update()
-     */
     @PutMapping("/{id}")
-    public ResponseEntity<SurveyResponse> update(@PathVariable Long id, @RequestBody SurveyRequest request) {
+    public ResponseEntity<SurveyResponse> update(@PathVariable Long id, @RequestBody @Valid SurveyRequest request) {
         SurveyResponse saved = surveyService.update(id, request);
         return ResponseEntity.ok(saved);
     }

@@ -11,7 +11,6 @@ import javax.validation.constraints.NotBlank;
 @RequiredArgsConstructor
 public class SurveyRequest {
     @NotBlank
-    // TODO: 2021/03/09 can be blank?
     private final String title;
     // TODO: 2021/03/09 extracted by header (token)
     @MemberShouldExist
