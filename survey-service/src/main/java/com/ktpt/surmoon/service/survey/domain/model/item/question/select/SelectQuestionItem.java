@@ -1,4 +1,4 @@
-package com.ktpt.surmoon.service.survey.domain.model.questionItem;
+package com.ktpt.surmoon.service.survey.domain.model.item.question.select;
 
 import javax.persistence.Entity;
 

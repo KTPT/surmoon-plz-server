@@ -1,4 +1,4 @@
-package com.ktpt.surmoon.service.survey.domain.model.questionItem.text;
+package com.ktpt.surmoon.service.survey.domain.model.item.question.text;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
