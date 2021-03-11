@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping(TEXT_QUESTION_ITEM_URI)
 @RestController
 public class TextQuestionItemController {
-    public static final String TEXT_QUESTION_ITEM_URI = "/items/question/text";
+    public static final String TEXT_QUESTION_ITEM_URI = "/api/items/question/text";
 
     private final TextQuestionItemService service;
 }
