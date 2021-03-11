@@ -8,8 +8,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.ktpt.surmoon.service.survey.domain.model.questionItem.SelectQuestionItem;
 import com.ktpt.surmoon.service.survey.domain.model.questionItem.SelectQuestionItemRepository;
-import com.ktpt.surmoon.service.survey.domain.model.questionItem.TextQuestionItem;
-import com.ktpt.surmoon.service.survey.domain.model.questionItem.TextQuestionItemRepository;
+import com.ktpt.surmoon.service.survey.domain.model.questionItem.text.TextQuestionItem;
+import com.ktpt.surmoon.service.survey.domain.model.questionItem.text.TextQuestionItemRepository;
+import com.ktpt.surmoon.service.survey.domain.model.questionItem.text.TextQuestionItemType;
 
 @DataJpaTest
 public class SharedIdTest {
@@ -21,7 +22,7 @@ public class SharedIdTest {
 
     @Test
     void createSharedIdEntity() {
-        TextQuestionItem firstEntity = textQuestionItemRepository.save(new TextQuestionItem());
+        TextQuestionItem firstEntity = textQuestionItemRepository.save(new TextQuestionItem("title", false, TextQuestionItemType.SHORT, null, null));
 
         SelectQuestionItem secondEntity = selectQuestionItemRepository.save(new SelectQuestionItem());
 
