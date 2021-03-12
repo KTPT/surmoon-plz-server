@@ -74,6 +74,7 @@ public class SurveyIntegrationTest extends IntegrationTest {
     Stream<DynamicTest> updateSurveyFails() {
         // given
         Survey saved = findAnySurvey();
+        Member noCreator = saveMember(new Member(null));
 
         return Stream.of(
                 DynamicTest.dynamicTest("같은 title로 수정시 BadRequest", () -> {
@@ -86,11 +87,11 @@ public class SurveyIntegrationTest extends IntegrationTest {
                 }),
                 DynamicTest.dynamicTest("creatorId가 다를때 BadRequest", () -> {
                     // when
-                    SurveyRequest request = new SurveyRequest("changed", -1L);
+                    SurveyRequest request = new SurveyRequest("changed", noCreator.getId());
                     ErrorResponse response = putFails(request, SurveyController.SURVEY_URI + "/" + saved.getId());
 
                     // then
-                    assertThat(response.getMessages()).containsExactly("수정 권한이 없는 사용자, id : " + -1);
+                    assertThat(response.getMessages()).containsExactly("수정 권한이 없는 사용자, id : " + noCreator.getId());
                 })
         );
     }
