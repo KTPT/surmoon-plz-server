@@ -125,6 +125,10 @@ public class IntegrationTest {
                 .orElseThrow(() -> new AssertionError("there is no member"));
     }
 
+    protected Member saveMember(Member member) {
+        return memberRepository.save(member);
+    }
+
     protected Survey findAnySurvey() {
         return surveyRepository.findAll().stream()
                 .findAny()
