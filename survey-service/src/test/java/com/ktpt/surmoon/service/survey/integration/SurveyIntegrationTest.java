@@ -57,7 +57,7 @@ public class SurveyIntegrationTest extends IntegrationTest {
 
         // when
         SurveyRequest request = new SurveyRequest("changed", saved.getCreatorId());
-        SurveyResponse response = put(request, SurveyController.SURVEY_URI + "/" + saved.getId(), SurveyResponse.class);
+        SurveyResponse response = put(request, SurveyController.SURVEY_URI, saved.getId(), SurveyResponse.class);
 
         // then
         assertAll(

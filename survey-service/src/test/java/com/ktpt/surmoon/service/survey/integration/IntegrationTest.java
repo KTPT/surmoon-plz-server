@@ -84,11 +84,11 @@ public class IntegrationTest {
         }
     }
 
-    protected <T, U> U put(T request, String uri, Class<U> response) {
+    protected <T, U> U put(T request, String uri, Long resourceId, Class<U> response) {
         try {
             String body = objectMapper.writeValueAsString(request);
 
-            MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put(uri)
+            MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put(uri + "/" + resourceId)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .content(body))
@@ -120,6 +120,16 @@ public class IntegrationTest {
         }
     }
 
+    protected void delete(String uri, Long id) {
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.delete(uri + "/" + id))
+                    .andExpect(MockMvcResultMatchers.status().isNoContent());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AssertionError("test fails");
+        }
+    }
+
     protected Member findAnyMember() {
         return memberRepository.findAll().stream()
                 .findAny()
@@ -140,5 +150,9 @@ public class IntegrationTest {
         return themeRepository.findAll().stream()
                 .findAny()
                 .orElseThrow(() -> new AssertionError("there is no survey"));
+    }
+
+    protected Theme saveTheme(Theme theme) {
+        return themeRepository.save(theme);
     }
 }

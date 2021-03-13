@@ -52,8 +52,8 @@ public class ThemeIntegrationTest extends IntegrationTest {
         Theme theme = findAnyTheme();
 
         // when
-        ThemeRequest request = new ThemeRequest(theme.getSurveyId(), "thumbnail", "mainColor", "backgroundColor", "fontStyle");
-        ThemeResponse response = put(request, ThemeController.THEME_URI + "/" + theme.getId(), ThemeResponse.class);
+        ThemeRequest request = new ThemeRequest(theme.getSurveyId(), "test", "test", "test", "test");
+        ThemeResponse response = put(request, ThemeController.THEME_URI, theme.getId(), ThemeResponse.class);
 
         // then
         assertAll(
@@ -64,5 +64,16 @@ public class ThemeIntegrationTest extends IntegrationTest {
                 () -> assertThat(response.getBackgroundColor()).isEqualTo(request.getBackgroundColor()),
                 () -> assertThat(response.getThumbnail()).isEqualTo(request.getThumbnail())
         );
+    }
+
+    @DisplayName("테마 삭제")
+    @Test
+    void deleteTheme() {
+        // given
+        Survey survey = findAnySurvey();
+        Theme theme = saveTheme(new Theme(null, survey.getId(), "test", "test", "test", "test"));
+
+        //when
+        delete(ThemeController.THEME_URI, theme.getId());
     }
 }

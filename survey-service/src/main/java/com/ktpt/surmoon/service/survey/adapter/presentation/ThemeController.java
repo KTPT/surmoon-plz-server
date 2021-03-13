@@ -32,4 +32,11 @@ public class ThemeController {
 
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        themeService.delete(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }

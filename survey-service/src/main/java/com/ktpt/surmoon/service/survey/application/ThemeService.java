@@ -25,6 +25,10 @@ public class ThemeService {
         return ThemeResponse.from(themeRepository.save(theme));
     }
 
+    public void delete(Long id) {
+        themeRepository.deleteById(id);
+    }
+
     private Theme findById(Long id) {
         return themeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 theme, id : " + id));
