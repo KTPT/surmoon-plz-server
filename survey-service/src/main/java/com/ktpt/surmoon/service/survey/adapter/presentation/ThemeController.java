@@ -5,10 +5,7 @@ import com.ktpt.surmoon.service.survey.application.dto.ThemeRequest;
 import com.ktpt.surmoon.service.survey.application.dto.ThemeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -27,5 +24,12 @@ public class ThemeController {
 
         return ResponseEntity.created(URI.create(THEME_URI + "/" + response.getId()))
                 .body(response);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<ThemeResponse> update(@PathVariable Long id, @RequestBody @Valid ThemeRequest request) {
+        ThemeResponse response = themeService.update(id, request);
+
+        return ResponseEntity.ok(response);
     }
 }

@@ -17,4 +17,16 @@ public class ThemeService {
 
         return ThemeResponse.from(saved);
     }
+
+    public ThemeResponse update(Long id, ThemeRequest request) {
+        Theme theme = findById(id);
+        theme.update(request.getSurveyId(), request.getThumbnail(), request.getMainColor(), request.getBackgroundColor(), request.getFontStyle());
+
+        return ThemeResponse.from(themeRepository.save(theme));
+    }
+
+    private Theme findById(Long id) {
+        return themeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 theme, id : " + id));
+    }
 }

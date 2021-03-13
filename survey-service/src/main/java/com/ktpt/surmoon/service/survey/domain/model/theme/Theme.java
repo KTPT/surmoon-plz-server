@@ -23,4 +23,19 @@ public class Theme {
     private String mainColor;
     private String backgroundColor;
     private String fontStyle;
+
+    public void update(Long surveyId, String thumbnail, String mainColor, String backgroundColor, String fontStyle) {
+        verifyUpdate(surveyId);
+        this.surveyId = surveyId;
+        this.thumbnail = thumbnail;
+        this.mainColor = mainColor;
+        this.backgroundColor = backgroundColor;
+        this.fontStyle = fontStyle;
+    }
+
+    private void verifyUpdate(Long surveyId) {
+        if (!this.surveyId.equals(surveyId)) {
+            throw new IllegalArgumentException("잘못된 surveyId, surveyId : " + surveyId);
+        }
+    }
 }

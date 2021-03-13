@@ -6,6 +6,8 @@ import com.ktpt.surmoon.service.survey.domain.model.member.Member;
 import com.ktpt.surmoon.service.survey.domain.model.member.MemberRepository;
 import com.ktpt.surmoon.service.survey.domain.model.survey.Survey;
 import com.ktpt.surmoon.service.survey.domain.model.survey.SurveyRepository;
+import com.ktpt.surmoon.service.survey.domain.model.theme.Theme;
+import com.ktpt.surmoon.service.survey.domain.model.theme.ThemeRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +30,14 @@ public class IntegrationTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private WebApplicationContext context;
-
     @Autowired
     private MemberRepository memberRepository;
-
     @Autowired
     private SurveyRepository surveyRepository;
+    @Autowired
+    private ThemeRepository themeRepository;
 
     @BeforeEach
     void setUp() {
@@ -131,6 +132,12 @@ public class IntegrationTest {
 
     protected Survey findAnySurvey() {
         return surveyRepository.findAll().stream()
+                .findAny()
+                .orElseThrow(() -> new AssertionError("there is no survey"));
+    }
+
+    protected Theme findAnyTheme() {
+        return themeRepository.findAll().stream()
                 .findAny()
                 .orElseThrow(() -> new AssertionError("there is no survey"));
     }
