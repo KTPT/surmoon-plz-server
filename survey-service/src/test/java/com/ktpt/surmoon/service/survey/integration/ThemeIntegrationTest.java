@@ -1,6 +1,7 @@
 package com.ktpt.surmoon.service.survey.integration;
 
 import com.ktpt.surmoon.service.survey.adapter.presentation.ThemeController;
+import com.ktpt.surmoon.service.survey.adapter.presentation.advice.ErrorResponse;
 import com.ktpt.surmoon.service.survey.application.dto.ThemeRequest;
 import com.ktpt.surmoon.service.survey.application.dto.ThemeResponse;
 import com.ktpt.surmoon.service.survey.domain.model.survey.Survey;
@@ -30,5 +31,16 @@ public class ThemeIntegrationTest extends IntegrationTest {
                 () -> assertThat(response.getBackgroundColor()).isEqualTo(request.getBackgroundColor()),
                 () -> assertThat(response.getThumbnail()).isEqualTo(request.getThumbnail())
         );
+    }
+
+    @DisplayName("테마 생성 실패")
+    @Test
+    void createThemeFails() {
+        // when
+        ThemeRequest request = new ThemeRequest(-1L, "thumbnail", "mainColor", "backgroundColor", "fontStyle");
+        ErrorResponse response = postFails(request, ThemeController.THEME_URI);
+
+        // then
+        assertThat(response.getMessages()).containsExactly("Survey with id: -1 does not exists!");
     }
 }

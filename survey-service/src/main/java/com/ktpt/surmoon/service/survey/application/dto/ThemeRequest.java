@@ -1,5 +1,6 @@
 package com.ktpt.surmoon.service.survey.application.dto;
 
+import com.ktpt.surmoon.service.survey.application.dto.validation.SurveyShouldExist;
 import com.ktpt.surmoon.service.survey.domain.model.theme.Theme;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class ThemeRequest {
+    @SurveyShouldExist
     private final Long surveyId;
+    // TODO: 2021/03/13 Nullable?
     private final String thumbnail;
     private final String mainColor;
     private final String backgroundColor;
