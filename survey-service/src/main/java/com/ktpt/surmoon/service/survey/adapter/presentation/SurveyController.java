@@ -15,7 +15,7 @@ import java.net.URI;
 @RequestMapping(SurveyController.SURVEY_URI)
 @RestController
 public class SurveyController {
-    public static final String SURVEY_URI = "/surveys";
+    public static final String SURVEY_URI = "/api/surveys";
 
     private final SurveyService surveyService;
 
