@@ -18,4 +18,16 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
+    private String email;
+
+    public Member(String name, String email) {
+        this.id = null;
+        this.name = name;
+        this.email = email;
+    }
+
+    public void rename(String name) {
+        this.name = name;
+    }
 }
