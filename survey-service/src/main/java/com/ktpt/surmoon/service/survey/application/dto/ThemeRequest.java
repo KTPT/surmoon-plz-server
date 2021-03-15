@@ -20,6 +20,10 @@ public class ThemeRequest {
         this(null, null, null, null, null);
     }
 
+    public static ThemeRequest of(Long surveyId, SurveyCreateRequest request) {
+        return new ThemeRequest(surveyId, request.getThumbnail(), request.getMainColor(), request.getBackgroundColor(), request.getFontStyle());
+    }
+
     public Theme toEntity() {
         return new Theme(null, surveyId, thumbnail, mainColor, backgroundColor, fontStyle);
     }

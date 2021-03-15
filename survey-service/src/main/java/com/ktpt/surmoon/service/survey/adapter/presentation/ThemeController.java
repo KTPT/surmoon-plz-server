@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URI;
 
 @RequiredArgsConstructor
 @RequestMapping(ThemeController.THEME_URI)
@@ -18,25 +17,10 @@ public class ThemeController {
 
     private final ThemeService themeService;
 
-    @PostMapping
-    public ResponseEntity<ThemeResponse> save(@RequestBody @Valid ThemeRequest request) {
-        ThemeResponse response = themeService.save(request);
-
-        return ResponseEntity.created(URI.create(THEME_URI + "/" + response.getId()))
-                .body(response);
-    }
-
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ThemeResponse> update(@PathVariable Long id, @RequestBody @Valid ThemeRequest request) {
         ThemeResponse response = themeService.update(id, request);
 
         return ResponseEntity.ok(response);
-    }
-
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        themeService.delete(id);
-
-        return ResponseEntity.noContent().build();
     }
 }
