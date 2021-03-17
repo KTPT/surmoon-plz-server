@@ -29,9 +29,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) {
         OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
 
-      log.error("hihihi");
+        log.error("hihihi");
         try {
-            return processOAuth2User(oAuth2UserRequest, oAuth2User);
+            return processOAuth2User(oAuth2User);
         } catch (AuthenticationException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -39,9 +39,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
     }
 
-    private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
-        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(
-            oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
+    public OAuth2User processOAuth2User(OAuth2User oAuth2User) {
+        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(oAuth2User.getAttributes());
         if (oAuth2UserInfo.getEmail().isEmpty()) {
             throw new RuntimeException("OAuth2 provider에 이메일이 없습니다.");
         }

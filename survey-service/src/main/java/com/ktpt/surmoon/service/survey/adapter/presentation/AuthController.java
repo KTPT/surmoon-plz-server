@@ -24,7 +24,11 @@ public class AuthController {
 
     @GetMapping("/login-success")
     public ResponseEntity<String> success(@AuthenticationPrincipal OAuth2User user) {
-        String name = (String)user.getAttributes().get("name");
+
+        OAuth2User oAuth2User = customOAuth2UserService.processOAuth2User(user);
+
+        String name = (String)oAuth2User.getAttributes().get("name");
+
         log.error("!!!!" + name);
         return ResponseEntity.ok(user.getName());
     }
