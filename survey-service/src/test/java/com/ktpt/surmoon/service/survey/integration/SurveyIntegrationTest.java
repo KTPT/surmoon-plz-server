@@ -79,7 +79,7 @@ public class SurveyIntegrationTest extends IntegrationTest {
     Stream<DynamicTest> updateSurveyFails() {
         // given
         Survey saved = findAnySurvey();
-        Member noCreator = saveMember(new Member(null));
+        Member noCreator = saveMember(new Member(null, null));
 
         return Stream.of(
                 DynamicTest.dynamicTest("같은 title로 수정시 BadRequest", () -> {
