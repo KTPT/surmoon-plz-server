@@ -4,7 +4,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-import com.ktpt.surmoon.service.survey.security.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -15,7 +14,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         security
             .authorizeRequests()
             .antMatchers("/", "/login/**", "/logout", "/error", "/h2-console/**").permitAll()
-            .antMatchers("/hi", "/login-success").authenticated()
+            .antMatchers("/login-success").authenticated()
             .anyRequest().authenticated()
             .and()
             .oauth2Login()
