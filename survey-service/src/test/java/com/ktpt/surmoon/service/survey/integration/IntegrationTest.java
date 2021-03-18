@@ -6,6 +6,8 @@ import com.ktpt.surmoon.service.survey.domain.model.member.Member;
 import com.ktpt.surmoon.service.survey.domain.model.member.MemberRepository;
 import com.ktpt.surmoon.service.survey.domain.model.survey.Survey;
 import com.ktpt.surmoon.service.survey.domain.model.survey.SurveyRepository;
+import com.ktpt.surmoon.service.survey.domain.model.theme.Theme;
+import com.ktpt.surmoon.service.survey.domain.model.theme.ThemeRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +30,14 @@ public class IntegrationTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private WebApplicationContext context;
-
     @Autowired
     private MemberRepository memberRepository;
-
     @Autowired
     private SurveyRepository surveyRepository;
+    @Autowired
+    private ThemeRepository themeRepository;
 
     @BeforeEach
     void setUp() {
@@ -83,11 +84,11 @@ public class IntegrationTest {
         }
     }
 
-    protected <T, U> U put(T request, String uri, Class<U> response) {
+    protected <T, U> U put(T request, String uri, Long resourceId, Class<U> response) {
         try {
             String body = objectMapper.writeValueAsString(request);
 
-            MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put(uri)
+            MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put(uri + "/" + resourceId)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .content(body))
@@ -119,6 +120,16 @@ public class IntegrationTest {
         }
     }
 
+    protected void delete(String uri, Long id) {
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.delete(uri + "/" + id))
+                    .andExpect(MockMvcResultMatchers.status().isNoContent());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AssertionError("test fails");
+        }
+    }
+
     protected Member findAnyMember() {
         return memberRepository.findAll().stream()
                 .findAny()
@@ -133,5 +144,15 @@ public class IntegrationTest {
         return surveyRepository.findAll().stream()
                 .findAny()
                 .orElseThrow(() -> new AssertionError("there is no survey"));
+    }
+
+    protected Theme findAnyTheme() {
+        return themeRepository.findAll().stream()
+                .findAny()
+                .orElseThrow(() -> new AssertionError("there is no survey"));
+    }
+
+    protected Theme saveTheme(Theme theme) {
+        return themeRepository.save(theme);
     }
 }

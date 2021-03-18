@@ -2,6 +2,8 @@ package com.ktpt.surmoon.service.survey.integration;
 
 import com.ktpt.surmoon.service.survey.adapter.presentation.SurveyController;
 import com.ktpt.surmoon.service.survey.adapter.presentation.advice.ErrorResponse;
+import com.ktpt.surmoon.service.survey.application.dto.SurveyCreateRequest;
+import com.ktpt.surmoon.service.survey.application.dto.SurveyCreateResponse;
 import com.ktpt.surmoon.service.survey.application.dto.SurveyRequest;
 import com.ktpt.surmoon.service.survey.application.dto.SurveyResponse;
 import com.ktpt.surmoon.service.survey.domain.model.member.Member;
@@ -17,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class SurveyIntegrationTest extends IntegrationTest {
+
     @DisplayName("설문 생성")
     @Test
     void createSurvey() {
@@ -24,8 +27,8 @@ public class SurveyIntegrationTest extends IntegrationTest {
         Member creator = findAnyMember();
 
         // when
-        SurveyRequest request = new SurveyRequest("title", creator.getId());
-        SurveyResponse response = post(request, SurveyController.SURVEY_URI, SurveyResponse.class);
+        SurveyCreateRequest request = new SurveyCreateRequest("title", "thumbnail", "mainColor", "backgroundColor", "fontStyle", creator.getId());
+        SurveyCreateResponse response = post(request, SurveyController.SURVEY_URI, SurveyCreateResponse.class);
 
         // then
         assertAll(
@@ -33,7 +36,8 @@ public class SurveyIntegrationTest extends IntegrationTest {
                 () -> assertThat(response.getTitle()).isEqualTo(request.getTitle()),
                 () -> assertThat(response.getCreatorId()).isEqualTo(request.getCreatorId()),
                 () -> assertThat(response.getCreatedDate()).isNotNull(),
-                () -> assertThat(response.getLastModifiedDate()).isNotNull()
+                () -> assertThat(response.getLastModifiedDate()).isNotNull(),
+                () -> assertThat(response.getThemeResponse().getSurveyId()).isNotNull()
         );
     }
 
@@ -41,12 +45,13 @@ public class SurveyIntegrationTest extends IntegrationTest {
     @Test
     void createSurveyFails() {
         // when
-        SurveyRequest request = new SurveyRequest("", -1L);
+        SurveyCreateRequest request = new SurveyCreateRequest("", "", "", "", "", -1L);
         ErrorResponse response = postFails(request, SurveyController.SURVEY_URI);
 
         // then
         assertThat(response.getMessages())
-                .containsExactlyInAnyOrder("must not be blank", "Member with id: -1 does not exists!");
+                .containsOnly("must not be blank", "Member with id: -1 does not exists!");
+        assertThat(response.getMessages().size()).isEqualTo(6);
     }
 
     @DisplayName("설문 수정")
@@ -57,7 +62,7 @@ public class SurveyIntegrationTest extends IntegrationTest {
 
         // when
         SurveyRequest request = new SurveyRequest("changed", saved.getCreatorId());
-        SurveyResponse response = put(request, SurveyController.SURVEY_URI + "/" + saved.getId(), SurveyResponse.class);
+        SurveyResponse response = put(request, SurveyController.SURVEY_URI, saved.getId(), SurveyResponse.class);
 
         // then
         assertAll(
