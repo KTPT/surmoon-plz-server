@@ -35,4 +35,23 @@ public class Section {
     private LocalDateTime createdDate;
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
+
+    public Section updateContent(Long surveyId, String title, String description) {
+        verifyUpdate(surveyId);
+        this.title = title;
+        this.description = description;
+        return this;
+    }
+
+    public Section updatePreviousSectionId(Long surveyId, Long previousSectionId) {
+        verifyUpdate(surveyId);
+        this.previousSectionId = previousSectionId;
+        return this;
+    }
+
+    private void verifyUpdate(Long surveyId) {
+        if (!this.surveyId.equals(surveyId)) {
+            throw new IllegalArgumentException("해당 survey가 아닙니다, surveyId : " + surveyId);
+        }
+    }
 }
