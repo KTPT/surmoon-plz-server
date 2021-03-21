@@ -1,7 +1,5 @@
 package com.ktpt.surmoon.service.survey.application;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,11 +12,13 @@ import com.ktpt.surmoon.service.survey.domain.model.section.SectionRepository;
 import com.ktpt.surmoon.service.survey.domain.model.section.SectionSequenceService;
 import lombok.RequiredArgsConstructor;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class SectionService {
     private final SectionRepository sectionRepository;
+    private final SectionSequenceService sectionSequenceService;
 
+    @Transactional
     public SectionResponse save(SectionRequest request) {
         Section section = sectionSequenceService.insertSequence(request);
         return SectionResponse.from(sectionRepository.save(section));
@@ -42,10 +42,6 @@ public class SectionService {
     private Section findById(Long id) {
         return sectionRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 section, id : " + id));
-    }
-
-    private Optional<Section> findByPreviousSectionId(Long previousSectionId) {
-        return sectionRepository.findByPreviousSectionId(previousSectionId);
     }
 
     @Transactional
