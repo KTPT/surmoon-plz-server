@@ -59,4 +59,10 @@ public class SectionService {
     private Optional<Section> findByPreviousSectionId(Long previousSectionId) {
         return sectionRepository.findByPreviousSectionId(previousSectionId);
     }
+
+    @Transactional
+    public void delete(Long id) {
+        sectionRepository.deleteById(id);
+        // TODO: delete all Items whose sectionId = id
+    }
 }

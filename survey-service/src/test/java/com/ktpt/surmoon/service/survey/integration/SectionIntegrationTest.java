@@ -170,10 +170,13 @@ public class SectionIntegrationTest extends IntegrationTest {
     @Test
     public void deleteSection() {
         //given
+        Section section = createFixture(null);
 
         //when
+        delete(SectionController.SECTION_URI, section.getId());
 
         //then
+        assertThat(sectionRepository.findById(section.getId())).isNotPresent();
     }
 
     private <T, U> U put(T request, String uri, Long resourceId, String type, Class<U> response) {
