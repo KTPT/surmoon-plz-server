@@ -5,5 +5,5 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SectionRepository extends JpaRepository<Section, Long> {
-    public Optional<Section> findByPreviousSectionId(Long previousSectionId);
+    Optional<Section> findOptionalByPreviousSectionId(Long previousSectionId);
 }

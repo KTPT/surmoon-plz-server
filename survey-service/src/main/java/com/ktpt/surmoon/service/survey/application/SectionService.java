@@ -11,7 +11,7 @@ import com.ktpt.surmoon.service.survey.application.dto.SectionUpdateContentReque
 import com.ktpt.surmoon.service.survey.application.dto.SectionUpdateSequenceRequest;
 import com.ktpt.surmoon.service.survey.domain.model.section.Section;
 import com.ktpt.surmoon.service.survey.domain.model.section.SectionRepository;
-import com.ktpt.surmoon.service.survey.domain.model.section.SectionSequenceUpdateService;
+import com.ktpt.surmoon.service.survey.domain.model.section.SectionSequenceService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -20,8 +20,8 @@ public class SectionService {
     private final SectionRepository sectionRepository;
 
     public SectionResponse save(SectionRequest request) {
-        Section saved = sectionRepository.save(request.toEntity());
-        return SectionResponse.from(saved);
+        Section section = sectionSequenceService.insertSequence(request);
+        return SectionResponse.from(sectionRepository.save(section));
     }
 
     public SectionResponse updateContent(Long id, SectionUpdateContentRequest request) {
@@ -34,7 +34,7 @@ public class SectionService {
     @Transactional
     public SectionResponse updateSequence(Long id, SectionUpdateSequenceRequest request) {
         Section target = findById(id);
-        sectionSequenceUpdateService.updateSequence(target, request.getPreviousSectionId(), request.getSurveyId());
+        sectionSequenceService.updateSequence(target, request.getPreviousSectionId(), request.getSurveyId());
 
         return SectionResponse.from(sectionRepository.save(target));
     }

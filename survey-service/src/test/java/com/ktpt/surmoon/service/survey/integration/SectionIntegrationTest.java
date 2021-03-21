@@ -34,10 +34,15 @@ public class SectionIntegrationTest extends IntegrationTest {
         //given
         String title = "title";
         String description = "description";
+        Section section1 = createFixture(0L);
+        Section section2 = createFixture(section1.getId());
 
         //when
-        SectionRequest request = new SectionRequest(survey.getId(), 0L, title, description);
+        SectionRequest request = new SectionRequest(survey.getId(), section1.getId(), title, description);
         SectionResponse response = post(request, SectionController.SECTION_URI, SectionResponse.class);
+
+        Section findSection1 = getById(section1.getId());
+        Section findSection2 = getById(section2.getId());
 
         //then
         assertThat(response.getId()).isNotNull();
@@ -46,6 +51,10 @@ public class SectionIntegrationTest extends IntegrationTest {
         assertThat(response.getDescription()).isEqualTo(description);
         assertThat(response.getCreatedDate()).isNotNull();
         assertThat(response.getLastModifiedDate()).isNotNull();
+
+        assertThat(findSection1.getPreviousSectionId()).isEqualTo(0L);
+        assertThat(response.getPreviousSectionId()).isEqualTo(section1.getId());
+        assertThat(findSection2.getPreviousSectionId()).isEqualTo(response.getId());
     }
 
     @DisplayName("섹션 생성 실패")

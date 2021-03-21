@@ -23,7 +23,7 @@ public class SectionRequest {
         this(null, null, null, null);
     }
 
-    public Section toEntity() {
+    public Section toEntity(Long previousSectionId) {
         return new Section(null, surveyId, previousSectionId, title, description, null, null);
     }
 }
