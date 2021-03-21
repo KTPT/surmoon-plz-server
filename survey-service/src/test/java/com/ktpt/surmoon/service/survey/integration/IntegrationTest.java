@@ -1,13 +1,8 @@
 package com.ktpt.surmoon.service.survey.integration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ktpt.surmoon.service.survey.adapter.presentation.advice.ErrorResponse;
-import com.ktpt.surmoon.service.survey.domain.model.member.Member;
-import com.ktpt.surmoon.service.survey.domain.model.member.MemberRepository;
-import com.ktpt.surmoon.service.survey.domain.model.survey.Survey;
-import com.ktpt.surmoon.service.survey.domain.model.survey.SurveyRepository;
-import com.ktpt.surmoon.service.survey.domain.model.theme.Theme;
-import com.ktpt.surmoon.service.survey.domain.model.theme.ThemeRepository;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +17,20 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ktpt.surmoon.service.survey.adapter.presentation.advice.ErrorResponse;
+import com.ktpt.surmoon.service.survey.domain.model.member.Member;
+import com.ktpt.surmoon.service.survey.domain.model.member.MemberRepository;
+import com.ktpt.surmoon.service.survey.domain.model.survey.Survey;
+import com.ktpt.surmoon.service.survey.domain.model.survey.SurveyRepository;
+import com.ktpt.surmoon.service.survey.domain.model.theme.Theme;
+import com.ktpt.surmoon.service.survey.domain.model.theme.ThemeRepository;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public class IntegrationTest {
-    private MockMvc mockMvc;
+    protected MockMvc mockMvc;
     @Autowired
-    private ObjectMapper objectMapper;
+    protected ObjectMapper objectMapper;
     @Autowired
     private WebApplicationContext context;
     @Autowired

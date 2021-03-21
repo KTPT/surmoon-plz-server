@@ -32,9 +32,17 @@ public class SectionController {
             .body(saved);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<SectionResponse> update(@PathVariable Long id, @RequestBody @Valid SectionRequest request) {
-        SectionResponse response = sectionService.update(id, request);
+    @PutMapping("/{id}/content")
+    public ResponseEntity<SectionResponse> updateContent(@PathVariable Long id,
+        @RequestBody @Valid SectionRequest request) {
+        SectionResponse response = sectionService.updateContent(id, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}/sequence")
+    public ResponseEntity<SectionResponse> updateSequence(@PathVariable Long id,
+        @RequestBody @Valid SectionRequest request) {
+        SectionResponse response = sectionService.updateSequence(id, request);
         return ResponseEntity.ok(response);
     }
 }

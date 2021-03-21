@@ -21,34 +21,32 @@ public class SectionService {
         return SectionResponse.from(saved);
     }
 
+    public SectionResponse updateContent(Long id, SectionRequest request) {
+        Section section = findById(id);
+        section.updateContent(request.getSurveyId(), request.getTitle(), request.getDescription());
+
+        return SectionResponse.from(sectionRepository.save(section));
+    }
+
     @Transactional
-    public SectionResponse update(Long id, SectionRequest request) {
+    public SectionResponse updateSequence(Long id, SectionRequest request) {
         Section section = findById(id);
 
-        if ((section.getPreviousSectionId() == null && request.getPreviousSectionId() == null)
-            || section.getPreviousSectionId().equals(request.getPreviousSectionId())) {
+        Section sectionWhosePreviousSectionIdIsSameWithPreviousSectionIdOfRequest = findByPreviousSectionId(
+            request.getPreviousSectionId())
+            .orElseThrow(() -> new IllegalArgumentException(
+                "존재하지 않는 section, previousSectionId : " + request.getPreviousSectionId()));
 
-            section.updateContent(request.getSurveyId(), request.getTitle(), request.getDescription());
-        } else {
-            // 옮기려는 위치의 바로 뒷 section
-            Section section1 = findByPreviousSectionId(request.getPreviousSectionId())
-                .orElseThrow(() -> new IllegalArgumentException(
-                    "존재하지 않는 section, previousSectionId : " + request.getPreviousSectionId()));
+        Optional<Section> sectionWhosePreviousSectionIdIsSameWithId = findByPreviousSectionId(id);
 
-            // 맨 마지막 section을 이동하는 경우가 아닐 때
-            Optional<Section> section2 = findByPreviousSectionId(id);
+        sectionWhosePreviousSectionIdIsSameWithId.ifPresent(value -> sectionRepository.save(value
+            .updatePreviousSectionId(request.getSurveyId(), section.getPreviousSectionId())));
 
-            if (section2.isPresent()) {
-                // Section section2 = findByPreviousSectionId(id).get();
-                section2.get().updatePreviousSectionId(request.getSurveyId(), section.getPreviousSectionId());
-                sectionRepository.save(section2.get());
-            }
+        sectionRepository.save(
+            sectionWhosePreviousSectionIdIsSameWithPreviousSectionIdOfRequest.updatePreviousSectionId(
+                request.getSurveyId(), id));
 
-            section1.updatePreviousSectionId(request.getSurveyId(), id);
-            sectionRepository.save(section1);
-
-            section.updatePreviousSectionId(request.getSurveyId(), request.getPreviousSectionId());
-        }
+        section.updatePreviousSectionId(request.getSurveyId(), request.getPreviousSectionId());
 
         return SectionResponse.from(sectionRepository.save(section));
     }

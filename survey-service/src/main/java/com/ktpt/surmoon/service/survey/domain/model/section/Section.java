@@ -36,22 +36,31 @@ public class Section {
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
-    public Section updateContent(Long surveyId, String title, String description) {
-        verifyUpdate(surveyId);
+    public void updateContent(Long surveyId, String title, String description) {
+        verifySurveyId(surveyId);
+        verifyContentsAreSame(title, description);
         this.title = title;
         this.description = description;
-        return this;
     }
 
     public Section updatePreviousSectionId(Long surveyId, Long previousSectionId) {
-        verifyUpdate(surveyId);
+        verifySurveyId(surveyId);
         this.previousSectionId = previousSectionId;
         return this;
     }
 
-    private void verifyUpdate(Long surveyId) {
+    private void verifySurveyId(Long surveyId) {
         if (!this.surveyId.equals(surveyId)) {
             throw new IllegalArgumentException("해당 survey가 아닙니다, surveyId : " + surveyId);
+        }
+    }
+
+    private void verifyContentsAreSame(String title, String description) {
+        if (this.title.equals(title)) {
+            throw new IllegalArgumentException("동일한 title로 변경할 수 없습니다.");
+        }
+        if (this.description.equals(description)) {
+            throw new IllegalArgumentException("동일한 description으로 변경할 수 없습니다.");
         }
     }
 }

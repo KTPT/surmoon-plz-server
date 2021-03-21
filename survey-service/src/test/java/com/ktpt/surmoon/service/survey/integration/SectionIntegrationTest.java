@@ -8,6 +8,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.ktpt.surmoon.service.survey.adapter.presentation.SectionController;
 import com.ktpt.surmoon.service.survey.adapter.presentation.advice.ErrorResponse;
@@ -77,7 +81,8 @@ public class SectionIntegrationTest extends IntegrationTest {
         //when
         SectionRequest request = new SectionRequest(survey.getId(), section.getPreviousSectionId(), updatedTitle,
             updatedDescription);
-        SectionResponse response = put(request, SectionController.SECTION_URI, section.getId(), SectionResponse.class);
+        SectionResponse response = put(request, SectionController.SECTION_URI, section.getId(), "content",
+            SectionResponse.class);
 
         //then
         assertThat(response.getId()).isEqualTo(section.getId());
@@ -97,8 +102,10 @@ public class SectionIntegrationTest extends IntegrationTest {
         Section section3 = createFixture(section2.getId());
 
         //when
-        SectionRequest request = new SectionRequest(survey.getId(), section1.getId(), "title", "description");
-        SectionResponse response = put(request, SectionController.SECTION_URI, section3.getId(), SectionResponse.class);
+        SectionRequest request = new SectionRequest(survey.getId(), section1.getId(), section3.getTitle(),
+            section3.getDescription());
+        SectionResponse response = put(request, SectionController.SECTION_URI, section3.getId(), "sequence",
+            SectionResponse.class);
 
         Section findSection1 = getById(section1.getId());
         Section findSection2 = getById(section2.getId());
@@ -124,8 +131,10 @@ public class SectionIntegrationTest extends IntegrationTest {
         Section section4 = createFixture(section3.getId());
 
         //when
-        SectionRequest request = new SectionRequest(survey.getId(), section1.getId(), "title", "description");
-        SectionResponse response = put(request, SectionController.SECTION_URI, section3.getId(), SectionResponse.class);
+        SectionRequest request = new SectionRequest(survey.getId(), section1.getId(), section3.getTitle(),
+            section3.getDescription());
+        SectionResponse response = put(request, SectionController.SECTION_URI, section3.getId(), "sequence",
+            SectionResponse.class);
 
         Section findSection1 = getById(section1.getId());
         Section findSection2 = getById(section2.getId());
@@ -143,6 +152,20 @@ public class SectionIntegrationTest extends IntegrationTest {
         assertThat(findSection4.getPreviousSectionId()).isEqualTo(section2.getId());
     }
 
+    @DisplayName("섹션 내용 수정 실패")
+    @Test
+    public void failUpdateContent() {
+        //given
+        Section section = getById(createFixture(null).getId());
+
+        //when
+        SectionRequest request = new SectionRequest(survey.getId(), 1L, "title", "description");
+        ErrorResponse response = putFails(request, SectionController.SECTION_URI + "/" + section.getId() + "/content");
+
+        //then
+        assertThat(response.getMessages()).contains("동일한 title로 변경할 수 없습니다.");
+    }
+
     @DisplayName("섹션 삭제")
     @Test
     public void deleteSection() {
@@ -151,6 +174,24 @@ public class SectionIntegrationTest extends IntegrationTest {
         //when
 
         //then
+    }
+
+    private <T, U> U put(T request, String uri, Long resourceId, String type, Class<U> response) {
+        try {
+            String body = objectMapper.writeValueAsString(request);
+
+            MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put(uri + "/" + resourceId + "/" + type)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+            return objectMapper.readValue(result.getResponse().getContentAsString(), response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AssertionError("test fails");
+        }
     }
 
     private Section createFixture(Long previousSectionId) {

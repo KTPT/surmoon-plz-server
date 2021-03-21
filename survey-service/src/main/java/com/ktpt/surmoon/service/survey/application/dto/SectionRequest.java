@@ -1,5 +1,7 @@
 package com.ktpt.surmoon.service.survey.application.dto;
 
+import javax.validation.constraints.NotNull;
+
 import com.ktpt.surmoon.service.survey.application.dto.validation.SurveyShouldExist;
 import com.ktpt.surmoon.service.survey.domain.model.section.Section;
 import lombok.Getter;
@@ -11,7 +13,9 @@ public class SectionRequest {
     @SurveyShouldExist
     private final Long surveyId;
     private final Long previousSectionId;
+    @NotNull
     private final String title;
+    @NotNull
     private final String description;
 
     private SectionRequest() {
