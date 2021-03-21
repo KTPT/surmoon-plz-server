@@ -43,8 +43,9 @@ public class Section {
         this.description = description;
     }
 
-    public Section updatePreviousSectionId(Long surveyId, Long previousSectionId) {
+    public Section updatePreviousSectionId(Long previousSectionId, Long surveyId) {
         verifySurveyId(surveyId);
+        verifyPreviousSectionIdsAreSame(previousSectionId);
         this.previousSectionId = previousSectionId;
         return this;
     }
@@ -61,6 +62,12 @@ public class Section {
         }
         if (this.description.equals(description)) {
             throw new IllegalArgumentException("동일한 description으로 변경할 수 없습니다.");
+        }
+    }
+
+    private void verifyPreviousSectionIdsAreSame(Long previousSectionId) {
+        if (this.previousSectionId.equals(previousSectionId)) {
+            throw new IllegalArgumentException("동일한 previousSectionId로 변경할 수 없습니다.");
         }
     }
 }

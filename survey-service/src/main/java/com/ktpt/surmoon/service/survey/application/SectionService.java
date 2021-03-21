@@ -7,8 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ktpt.surmoon.service.survey.application.dto.SectionRequest;
 import com.ktpt.surmoon.service.survey.application.dto.SectionResponse;
+import com.ktpt.surmoon.service.survey.application.dto.SectionUpdateContentRequest;
+import com.ktpt.surmoon.service.survey.application.dto.SectionUpdateSequenceRequest;
 import com.ktpt.surmoon.service.survey.domain.model.section.Section;
 import com.ktpt.surmoon.service.survey.domain.model.section.SectionRepository;
+import com.ktpt.surmoon.service.survey.domain.model.section.SectionSequenceUpdateService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,7 +24,7 @@ public class SectionService {
         return SectionResponse.from(saved);
     }
 
-    public SectionResponse updateContent(Long id, SectionRequest request) {
+    public SectionResponse updateContent(Long id, SectionUpdateContentRequest request) {
         Section section = findById(id);
         section.updateContent(request.getSurveyId(), request.getTitle(), request.getDescription());
 
@@ -29,26 +32,11 @@ public class SectionService {
     }
 
     @Transactional
-    public SectionResponse updateSequence(Long id, SectionRequest request) {
-        Section section = findById(id);
+    public SectionResponse updateSequence(Long id, SectionUpdateSequenceRequest request) {
+        Section target = findById(id);
+        sectionSequenceUpdateService.updateSequence(target, request.getPreviousSectionId(), request.getSurveyId());
 
-        Section sectionWhosePreviousSectionIdIsSameWithPreviousSectionIdOfRequest = findByPreviousSectionId(
-            request.getPreviousSectionId())
-            .orElseThrow(() -> new IllegalArgumentException(
-                "존재하지 않는 section, previousSectionId : " + request.getPreviousSectionId()));
-
-        Optional<Section> sectionWhosePreviousSectionIdIsSameWithId = findByPreviousSectionId(id);
-
-        sectionWhosePreviousSectionIdIsSameWithId.ifPresent(value -> sectionRepository.save(value
-            .updatePreviousSectionId(request.getSurveyId(), section.getPreviousSectionId())));
-
-        sectionRepository.save(
-            sectionWhosePreviousSectionIdIsSameWithPreviousSectionIdOfRequest.updatePreviousSectionId(
-                request.getSurveyId(), id));
-
-        section.updatePreviousSectionId(request.getSurveyId(), request.getPreviousSectionId());
-
-        return SectionResponse.from(sectionRepository.save(section));
+        return SectionResponse.from(sectionRepository.save(target));
     }
 
     private Section findById(Long id) {

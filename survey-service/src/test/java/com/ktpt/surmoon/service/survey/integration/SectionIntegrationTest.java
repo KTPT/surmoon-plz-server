@@ -7,26 +7,19 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.ktpt.surmoon.service.survey.adapter.presentation.SectionController;
 import com.ktpt.surmoon.service.survey.adapter.presentation.advice.ErrorResponse;
 import com.ktpt.surmoon.service.survey.application.dto.SectionRequest;
 import com.ktpt.surmoon.service.survey.application.dto.SectionResponse;
+import com.ktpt.surmoon.service.survey.application.dto.SectionUpdateContentRequest;
+import com.ktpt.surmoon.service.survey.application.dto.SectionUpdateSequenceRequest;
 import com.ktpt.surmoon.service.survey.domain.model.section.Section;
-import com.ktpt.surmoon.service.survey.domain.model.section.SectionRepository;
 import com.ktpt.surmoon.service.survey.domain.model.survey.Survey;
 
 public class SectionIntegrationTest extends IntegrationTest {
 
     private Survey survey;
-
-    @Autowired
-    private SectionRepository sectionRepository;
 
     @Override
     @BeforeEach
@@ -43,7 +36,7 @@ public class SectionIntegrationTest extends IntegrationTest {
         String description = "description";
 
         //when
-        SectionRequest request = new SectionRequest(survey.getId(), null, title, description);
+        SectionRequest request = new SectionRequest(survey.getId(), 0L, title, description);
         SectionResponse response = post(request, SectionController.SECTION_URI, SectionResponse.class);
 
         //then
@@ -62,7 +55,7 @@ public class SectionIntegrationTest extends IntegrationTest {
         Long surveyIdDoesNotExist = -1L;
 
         //when
-        SectionRequest request = new SectionRequest(surveyIdDoesNotExist, null, "title", "description");
+        SectionRequest request = new SectionRequest(surveyIdDoesNotExist, 0L, "title", "description");
         ErrorResponse errorResponse = postFails(request, SectionController.SECTION_URI);
 
         //then
@@ -76,12 +69,12 @@ public class SectionIntegrationTest extends IntegrationTest {
         //given
         String updatedTitle = "updatedTitle";
         String updatedDescription = "updatedDescription";
-        Section section = getById(createFixture(null).getId());
+        Section section = getById(createFixture(0L).getId());
 
         //when
-        SectionRequest request = new SectionRequest(survey.getId(), section.getPreviousSectionId(), updatedTitle,
+        SectionUpdateContentRequest request = new SectionUpdateContentRequest(survey.getId(), updatedTitle,
             updatedDescription);
-        SectionResponse response = put(request, SectionController.SECTION_URI, section.getId(), "content",
+        SectionResponse response = patch(request, SectionController.SECTION_URI, section.getId(), "content",
             SectionResponse.class);
 
         //then
@@ -97,14 +90,13 @@ public class SectionIntegrationTest extends IntegrationTest {
     @Test
     public void updateSequence_WhenMoveLastSection() {
         //given
-        Section section1 = createFixture(null);
+        Section section1 = createFixture(0L);
         Section section2 = createFixture(section1.getId());
         Section section3 = createFixture(section2.getId());
 
         //when
-        SectionRequest request = new SectionRequest(survey.getId(), section1.getId(), section3.getTitle(),
-            section3.getDescription());
-        SectionResponse response = put(request, SectionController.SECTION_URI, section3.getId(), "sequence",
+        SectionUpdateSequenceRequest request = new SectionUpdateSequenceRequest(survey.getId(), section1.getId());
+        SectionResponse response = patch(request, SectionController.SECTION_URI, section3.getId(), "sequence",
             SectionResponse.class);
 
         Section findSection1 = getById(section1.getId());
@@ -116,7 +108,7 @@ public class SectionIntegrationTest extends IntegrationTest {
         assertThat(response.getSurveyId()).isEqualTo(section3.getSurveyId());
         assertThat(findSection3.getLastModifiedDate().isAfter(section3.getLastModifiedDate())).isTrue();
 
-        assertThat(findSection1.getPreviousSectionId()).isEqualTo(null);
+        assertThat(findSection1.getPreviousSectionId()).isEqualTo(0L);
         assertThat(response.getPreviousSectionId()).isEqualTo(section1.getId());
         assertThat(findSection2.getPreviousSectionId()).isEqualTo(section3.getId());
     }
@@ -125,15 +117,14 @@ public class SectionIntegrationTest extends IntegrationTest {
     @Test
     public void updateSequence_WhenMoveSectionInTheMiddle() {
         //given
-        Section section1 = createFixture(null);
+        Section section1 = createFixture(0L);
         Section section2 = createFixture(section1.getId());
         Section section3 = createFixture(section2.getId());
         Section section4 = createFixture(section3.getId());
 
         //when
-        SectionRequest request = new SectionRequest(survey.getId(), section1.getId(), section3.getTitle(),
-            section3.getDescription());
-        SectionResponse response = put(request, SectionController.SECTION_URI, section3.getId(), "sequence",
+        SectionUpdateSequenceRequest request = new SectionUpdateSequenceRequest(survey.getId(), section1.getId());
+        SectionResponse response = patch(request, SectionController.SECTION_URI, section3.getId(), "sequence",
             SectionResponse.class);
 
         Section findSection1 = getById(section1.getId());
@@ -146,7 +137,7 @@ public class SectionIntegrationTest extends IntegrationTest {
         assertThat(response.getSurveyId()).isEqualTo(section3.getSurveyId());
         assertThat(findSection3.getLastModifiedDate().isAfter(section3.getLastModifiedDate())).isTrue();
 
-        assertThat(findSection1.getPreviousSectionId()).isEqualTo(null);
+        assertThat(findSection1.getPreviousSectionId()).isEqualTo(0L);
         assertThat(response.getPreviousSectionId()).isEqualTo(section1.getId());
         assertThat(findSection2.getPreviousSectionId()).isEqualTo(section3.getId());
         assertThat(findSection4.getPreviousSectionId()).isEqualTo(section2.getId());
@@ -156,11 +147,12 @@ public class SectionIntegrationTest extends IntegrationTest {
     @Test
     public void failUpdateContent() {
         //given
-        Section section = getById(createFixture(null).getId());
+        Section section = getById(createFixture(0L).getId());
 
         //when
-        SectionRequest request = new SectionRequest(survey.getId(), 1L, "title", "description");
-        ErrorResponse response = putFails(request, SectionController.SECTION_URI + "/" + section.getId() + "/content");
+        SectionUpdateContentRequest request = new SectionUpdateContentRequest(survey.getId(), "title", "description");
+        ErrorResponse response = patchFails(request,
+            SectionController.SECTION_URI + "/" + section.getId() + "/content");
 
         //then
         assertThat(response.getMessages()).contains("동일한 title로 변경할 수 없습니다.");
@@ -170,40 +162,22 @@ public class SectionIntegrationTest extends IntegrationTest {
     @Test
     public void deleteSection() {
         //given
-        Section section = createFixture(null);
+        Section section = createFixture(0L);
 
         //when
         delete(SectionController.SECTION_URI, section.getId());
 
         //then
-        assertThat(sectionRepository.findById(section.getId())).isNotPresent();
-    }
-
-    private <T, U> U put(T request, String uri, Long resourceId, String type, Class<U> response) {
-        try {
-            String body = objectMapper.writeValueAsString(request);
-
-            MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put(uri + "/" + resourceId + "/" + type)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(body))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
-
-            return objectMapper.readValue(result.getResponse().getContentAsString(), response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new AssertionError("test fails");
-        }
+        assertThat(findOptionalById(section.getId())).isNotPresent();
     }
 
     private Section createFixture(Long previousSectionId) {
-        return sectionRepository.save(
+        return saveSection(
             new Section(null, survey.getId(), previousSectionId, "title", "description", LocalDateTime.now(),
                 LocalDateTime.now()));
     }
 
     private Section getById(Long id) {
-        return sectionRepository.findById(id).get();
+        return findOptionalById(id).get();
     }
 }

@@ -6,9 +6,9 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ktpt.surmoon.service.survey.application.SectionService;
 import com.ktpt.surmoon.service.survey.application.dto.SectionRequest;
 import com.ktpt.surmoon.service.survey.application.dto.SectionResponse;
+import com.ktpt.surmoon.service.survey.application.dto.SectionUpdateContentRequest;
+import com.ktpt.surmoon.service.survey.application.dto.SectionUpdateSequenceRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -33,16 +35,16 @@ public class SectionController {
             .body(saved);
     }
 
-    @PutMapping("/{id}/content")
+    @PatchMapping("/{id}/content")
     public ResponseEntity<SectionResponse> updateContent(@PathVariable Long id,
-        @RequestBody @Valid SectionRequest request) {
+        @RequestBody @Valid SectionUpdateContentRequest request) {
         SectionResponse response = sectionService.updateContent(id, request);
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}/sequence")
+    @PatchMapping("/{id}/sequence")
     public ResponseEntity<SectionResponse> updateSequence(@PathVariable Long id,
-        @RequestBody @Valid SectionRequest request) {
+        @RequestBody @Valid SectionUpdateSequenceRequest request) {
         SectionResponse response = sectionService.updateSequence(id, request);
         return ResponseEntity.ok(response);
     }
