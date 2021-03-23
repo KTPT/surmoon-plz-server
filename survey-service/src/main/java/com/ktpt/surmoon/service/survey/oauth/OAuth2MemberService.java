@@ -43,7 +43,9 @@ public class OAuth2MemberService {
     }
 
     private Member updateExistingMember(Member existingMember, OAuth2UserInfo oAuth2UserInfo) {
-        existingMember.rename(oAuth2UserInfo.getName());
+        if (existingMember.isNameChanged(oAuth2UserInfo.getName())) {
+            existingMember.updateName(oAuth2UserInfo.getName());
+        }
         return memberRepository.save(existingMember);
     }
 
