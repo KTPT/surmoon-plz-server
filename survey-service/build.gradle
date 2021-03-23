@@ -23,17 +23,19 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation group: 'org.webjars', name: 'webjars-locator-core', version: '0.46'
-    compile 'org.webjars:jquery:3.6.0'
-    compile 'org.webjars:bootstrap:5.0.0-beta2'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compileOnly 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+
+    //    아래는 프론트와 연동시 제거될 예정
+    implementation group: 'org.webjars', name: 'webjars-locator-core', version: '0.46'
+    compile 'org.webjars:jquery:3.6.0'
+    compile 'org.webjars:bootstrap:5.0.0-beta2'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 }
 
 test {
