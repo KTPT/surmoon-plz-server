@@ -14,7 +14,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         security
             .authorizeRequests()
             .antMatchers("/", "/login/**", "/logout", "/error", "/h2-console/**").permitAll()
-            .antMatchers("/login-success").authenticated()
             .anyRequest().authenticated()
             .and()
             .oauth2Login()
