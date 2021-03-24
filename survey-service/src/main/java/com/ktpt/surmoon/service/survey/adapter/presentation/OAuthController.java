@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ktpt.surmoon.service.survey.application.dto.TokenResponse;
-import com.ktpt.surmoon.service.survey.oauth.OAuth2MemberService;
+import com.ktpt.surmoon.service.survey.application.OAuth2MemberService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

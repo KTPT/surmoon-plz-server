@@ -1,4 +1,4 @@
-package com.ktpt.surmoon.service.survey.oauth.token;
+package com.ktpt.surmoon.service.survey.adapter.infra.token;
 
 import java.util.Date;
 
