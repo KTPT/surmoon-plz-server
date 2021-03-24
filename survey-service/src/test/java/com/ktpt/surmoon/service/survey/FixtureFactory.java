@@ -20,7 +20,7 @@ public class FixtureFactory implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        Member member = memberRepository.save(new Member(null));
+        Member member = memberRepository.save(new Member(null, null));
         Survey survey = surveyRepository.save(new Survey(null, "title", member.getId(), null, null));
         themeRepository.save(new Theme(null, survey.getId(), "thumbnail", "mainColor", "backgroundColor", "fontStyle"));
     }
