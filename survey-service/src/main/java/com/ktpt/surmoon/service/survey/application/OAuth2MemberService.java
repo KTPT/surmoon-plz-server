@@ -1,16 +1,15 @@
-package com.ktpt.surmoon.service.survey.oauth;
+package com.ktpt.surmoon.service.survey.application;
 
-import java.util.Optional;
-
+import com.ktpt.surmoon.service.survey.adapter.infrastructure.oauth.token.TokenProvider;
+import com.ktpt.surmoon.service.survey.adapter.infrastructure.oauth.user.OAuth2UserInfo;
+import com.ktpt.surmoon.service.survey.adapter.infrastructure.oauth.user.OAuth2UserInfoFactory;
+import com.ktpt.surmoon.service.survey.domain.model.member.Member;
+import com.ktpt.surmoon.service.survey.domain.model.member.MemberRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import com.ktpt.surmoon.service.survey.domain.model.member.Member;
-import com.ktpt.surmoon.service.survey.domain.model.member.MemberRepository;
-import com.ktpt.surmoon.service.survey.oauth.token.TokenProvider;
-import com.ktpt.surmoon.service.survey.oauth.user.OAuth2UserInfo;
-import com.ktpt.surmoon.service.survey.oauth.user.OAuth2UserInfoFactory;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Optional;
 
 @Slf4j
 @Service

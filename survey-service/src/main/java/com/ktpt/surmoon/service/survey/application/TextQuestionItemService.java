@@ -1,9 +1,8 @@
-package com.ktpt.surmoon.service.survey.application.item.question;
-
-import org.springframework.stereotype.Service;
+package com.ktpt.surmoon.service.survey.application;
 
 import com.ktpt.surmoon.service.survey.domain.model.item.question.text.TextQuestionItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service

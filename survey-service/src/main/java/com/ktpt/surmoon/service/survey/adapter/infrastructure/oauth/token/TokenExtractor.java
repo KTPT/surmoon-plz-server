@@ -1,10 +1,9 @@
-package com.ktpt.surmoon.service.survey.oauth.token;
-
-import java.util.Enumeration;
-
-import javax.servlet.http.HttpServletRequest;
+package com.ktpt.surmoon.service.survey.adapter.infrastructure.oauth.token;
 
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 @Component
 public class TokenExtractor {

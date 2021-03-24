@@ -1,12 +1,11 @@
 package com.ktpt.surmoon.service.survey.adapter.presentation.item.question;
 
-import static com.ktpt.surmoon.service.survey.adapter.presentation.item.question.TextQuestionItemController.*;
-
+import com.ktpt.surmoon.service.survey.application.TextQuestionItemService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ktpt.surmoon.service.survey.application.item.question.TextQuestionItemService;
-import lombok.RequiredArgsConstructor;
+import static com.ktpt.surmoon.service.survey.adapter.presentation.item.question.TextQuestionItemController.TEXT_QUESTION_ITEM_URI;
 
 @RequiredArgsConstructor
 @RequestMapping(TEXT_QUESTION_ITEM_URI)

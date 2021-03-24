@@ -1,18 +1,10 @@
-package com.ktpt.surmoon.service.survey.oauth.token;
-
-import java.util.Date;
-
-import org.springframework.stereotype.Component;
+package com.ktpt.surmoon.service.survey.adapter.infrastructure.oauth.token;
 
 import com.ktpt.surmoon.service.survey.adapter.presentation.advice.exception.InvalidTokenException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.*;
+import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 @Component
 public class TokenProvider {
