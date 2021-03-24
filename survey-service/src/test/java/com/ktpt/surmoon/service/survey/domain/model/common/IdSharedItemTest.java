@@ -1,17 +1,18 @@
 package com.ktpt.surmoon.service.survey.domain.model.common;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
 import com.ktpt.surmoon.service.survey.domain.model.item.question.select.SelectQuestionItem;
 import com.ktpt.surmoon.service.survey.domain.model.item.question.select.SelectQuestionItemRepository;
 import com.ktpt.surmoon.service.survey.domain.model.item.question.text.TextQuestionItem;
 import com.ktpt.surmoon.service.survey.domain.model.item.question.text.TextQuestionItemRepository;
 import com.ktpt.surmoon.service.survey.domain.model.item.question.text.TextQuestionItemType;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-public class SharedIdTest {
+public class IdSharedItemTest {
     @Autowired
     TextQuestionItemRepository textQuestionItemRepository;
 

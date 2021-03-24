@@ -1,4 +1,4 @@
-package com.ktpt.surmoon.service.survey.adapter.presentation;
+package com.ktpt.surmoon.service.survey.adapter.presentation.web;
 
 import com.ktpt.surmoon.service.survey.application.OAuth2MemberService;
 import com.ktpt.surmoon.service.survey.application.dto.TokenResponse;

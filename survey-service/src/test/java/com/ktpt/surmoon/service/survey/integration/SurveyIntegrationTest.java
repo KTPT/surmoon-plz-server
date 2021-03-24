@@ -1,7 +1,7 @@
 package com.ktpt.surmoon.service.survey.integration;
 
-import com.ktpt.surmoon.service.survey.adapter.presentation.SurveyController;
 import com.ktpt.surmoon.service.survey.adapter.presentation.advice.ErrorResponse;
+import com.ktpt.surmoon.service.survey.adapter.presentation.web.SurveyController;
 import com.ktpt.surmoon.service.survey.application.dto.SurveyCreateRequest;
 import com.ktpt.surmoon.service.survey.application.dto.SurveyCreateResponse;
 import com.ktpt.surmoon.service.survey.application.dto.SurveyRequest;
@@ -27,14 +27,14 @@ public class SurveyIntegrationTest extends IntegrationTest {
         Member creator = findAnyMember();
 
         // when
-        SurveyCreateRequest request = new SurveyCreateRequest("title", "thumbnail", "mainColor", "backgroundColor", "fontStyle", creator.getId());
-        SurveyCreateResponse response = post(request, SurveyController.SURVEY_URI, SurveyCreateResponse.class);
+        SurveyCreateRequest request = new SurveyCreateRequest("title", "thumbnail", "mainColor", "backgroundColor", "fontStyle");
+        SurveyCreateResponse response = postWithLogin(request, SurveyController.SURVEY_URI, SurveyCreateResponse.class, creator.getId());
 
         // then
         assertAll(
                 () -> assertThat(response.getId()).isNotNull(),
                 () -> assertThat(response.getTitle()).isEqualTo(request.getTitle()),
-                () -> assertThat(response.getCreatorId()).isEqualTo(request.getCreatorId()),
+                () -> assertThat(response.getCreatorId()).isEqualTo(creator.getId()),
                 () -> assertThat(response.getCreatedDate()).isNotNull(),
                 () -> assertThat(response.getLastModifiedDate()).isNotNull(),
                 () -> assertThat(response.getThemeResponse().getSurveyId()).isNotNull()
@@ -45,13 +45,13 @@ public class SurveyIntegrationTest extends IntegrationTest {
     @Test
     void createSurveyFails() {
         // when
-        SurveyCreateRequest request = new SurveyCreateRequest("", "", "", "", "", -1L);
-        ErrorResponse response = postFails(request, SurveyController.SURVEY_URI);
+        SurveyCreateRequest request = new SurveyCreateRequest("", "", "", "", "");
+        ErrorResponse response = postFailsWithLogin(request, SurveyController.SURVEY_URI, -1L);
 
         // then
         assertThat(response.getMessages())
-                .containsOnly("must not be blank", "Member with id: -1 does not exists!");
-        assertThat(response.getMessages().size()).isEqualTo(6);
+                .containsOnly("must not be blank");
+        assertThat(response.getMessages().size()).isEqualTo(5);
     }
 
     @DisplayName("설문 수정")
@@ -61,8 +61,8 @@ public class SurveyIntegrationTest extends IntegrationTest {
         Survey saved = findAnySurvey();
 
         // when
-        SurveyRequest request = new SurveyRequest("changed", saved.getCreatorId());
-        SurveyResponse response = put(request, SurveyController.SURVEY_URI, saved.getId(), SurveyResponse.class);
+        SurveyRequest request = new SurveyRequest("changed");
+        SurveyResponse response = putWithLogin(request, SurveyController.SURVEY_URI, saved.getId(), SurveyResponse.class, saved.getCreatorId());
 
         // then
         assertAll(
@@ -84,16 +84,16 @@ public class SurveyIntegrationTest extends IntegrationTest {
         return Stream.of(
                 DynamicTest.dynamicTest("같은 title로 수정시 BadRequest", () -> {
                     // when
-                    SurveyRequest request = new SurveyRequest(saved.getTitle(), saved.getCreatorId());
-                    ErrorResponse response = putFails(request, SurveyController.SURVEY_URI + "/" + saved.getId());
+                    SurveyRequest request = new SurveyRequest(saved.getTitle());
+                    ErrorResponse response = putFailsWithLogin(request, SurveyController.SURVEY_URI + "/" + saved.getId(), saved.getCreatorId());
 
                     // then
                     assertThat(response.getMessages()).containsExactly("같은 title로 수정할 수 없습니다.");
                 }),
                 DynamicTest.dynamicTest("creatorId가 다를때 BadRequest", () -> {
                     // when
-                    SurveyRequest request = new SurveyRequest("changed", noCreator.getId());
-                    ErrorResponse response = putFails(request, SurveyController.SURVEY_URI + "/" + saved.getId());
+                    SurveyRequest request = new SurveyRequest("changed");
+                    ErrorResponse response = putFailsWithLogin(request, SurveyController.SURVEY_URI + "/" + saved.getId(), noCreator.getId());
 
                     // then
                     assertThat(response.getMessages()).containsExactly("수정 권한이 없는 사용자, id : " + noCreator.getId());

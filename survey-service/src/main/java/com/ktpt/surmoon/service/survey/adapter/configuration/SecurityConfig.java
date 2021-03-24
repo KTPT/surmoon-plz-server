@@ -1,4 +1,4 @@
-package com.ktpt.surmoon.service.survey.adapter.config;
+package com.ktpt.surmoon.service.survey.adapter.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

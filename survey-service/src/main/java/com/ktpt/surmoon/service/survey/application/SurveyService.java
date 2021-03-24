@@ -14,15 +14,15 @@ public class SurveyService {
     private final ThemeService themeService;
 
     @Transactional
-    public SurveyCreateResponse save(SurveyCreateRequest request) {
-        Survey saved = surveyRepository.save(request.toSurvey());
+    public SurveyCreateResponse save(SurveyCreateRequest request, Long creatorId) {
+        Survey saved = surveyRepository.save(request.toSurvey(creatorId));
         ThemeResponse themeResponse = themeService.save(ThemeRequest.of(saved.getId(), request));
         return SurveyCreateResponse.of(saved, themeResponse);
     }
 
-    public SurveyResponse update(Long id, SurveyRequest request) {
+    public SurveyResponse update(Long id, SurveyRequest request, Long creatorId) {
         Survey survey = findById(id);
-        survey.changeTitleWhoCreator(request.getTitle(), request.getCreatorId());
+        survey.changeTitleWhoCreator(request.getTitle(), creatorId);
 
         return SurveyResponse.from(surveyRepository.save(survey));
     }

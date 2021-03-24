@@ -1,6 +1,5 @@
-package com.ktpt.surmoon.service.survey.adapter.infrastructure.oauth.token;
+package com.ktpt.surmoon.service.survey.adapter.infrastructure.jwt;
 
-import com.ktpt.surmoon.service.survey.adapter.presentation.advice.exception.InvalidTokenException;
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
 
@@ -27,11 +26,12 @@ public class TokenProvider {
         return getClaims(token).get("memberId", Long.class);
     }
 
-    public Claims getClaims(String token) {
+    private Claims getClaims(String token) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
             return claims.getBody();
         } catch (MalformedJwtException | SignatureException | UnsupportedJwtException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
             throw new InvalidTokenException("유효하지 않은 토큰");
         } catch (ExpiredJwtException e) {
             throw new InvalidTokenException("만료된 토큰.");

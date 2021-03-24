@@ -1,4 +1,4 @@
-package com.ktpt.surmoon.service.survey.application.dto.validation;
+package com.ktpt.surmoon.service.survey.adapter.infrastructure.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -1,4 +1,4 @@
-package com.ktpt.surmoon.service.survey.adapter.infrastructure.oauth.user;
+package com.ktpt.surmoon.service.survey.adapter.infrastructure.oauth;
 
 import java.util.Map;
 

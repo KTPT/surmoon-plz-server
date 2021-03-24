@@ -1,6 +1,6 @@
 package com.ktpt.surmoon.service.survey.integration;
 
-import com.ktpt.surmoon.service.survey.adapter.presentation.ThemeController;
+import com.ktpt.surmoon.service.survey.adapter.presentation.web.ThemeController;
 import com.ktpt.surmoon.service.survey.application.dto.ThemeRequest;
 import com.ktpt.surmoon.service.survey.application.dto.ThemeResponse;
 import com.ktpt.surmoon.service.survey.domain.model.theme.Theme;

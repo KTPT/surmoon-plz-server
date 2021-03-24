@@ -1,8 +1,8 @@
 package com.ktpt.surmoon.service.survey.application;
 
-import com.ktpt.surmoon.service.survey.adapter.infrastructure.oauth.token.TokenProvider;
-import com.ktpt.surmoon.service.survey.adapter.infrastructure.oauth.user.OAuth2UserInfo;
-import com.ktpt.surmoon.service.survey.adapter.infrastructure.oauth.user.OAuth2UserInfoFactory;
+import com.ktpt.surmoon.service.survey.adapter.infrastructure.jwt.TokenProvider;
+import com.ktpt.surmoon.service.survey.adapter.infrastructure.oauth.OAuth2UserInfo;
+import com.ktpt.surmoon.service.survey.adapter.infrastructure.oauth.OAuth2UserInfoFactory;
 import com.ktpt.surmoon.service.survey.domain.model.member.Member;
 import com.ktpt.surmoon.service.survey.domain.model.member.MemberRepository;
 import lombok.extern.slf4j.Slf4j;

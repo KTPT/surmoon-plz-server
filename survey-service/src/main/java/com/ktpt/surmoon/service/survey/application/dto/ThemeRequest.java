@@ -1,6 +1,6 @@
 package com.ktpt.surmoon.service.survey.application.dto;
 
-import com.ktpt.surmoon.service.survey.application.dto.validation.SurveyShouldExist;
+import com.ktpt.surmoon.service.survey.adapter.infrastructure.validation.SurveyShouldExist;
 import com.ktpt.surmoon.service.survey.domain.model.theme.Theme;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

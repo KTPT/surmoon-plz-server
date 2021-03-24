@@ -1,4 +1,4 @@
-package com.ktpt.surmoon.service.survey.adapter.presentation;
+package com.ktpt.surmoon.service.survey.adapter.presentation.web;
 
 import com.ktpt.surmoon.service.survey.application.ThemeService;
 import com.ktpt.surmoon.service.survey.application.dto.ThemeRequest;
