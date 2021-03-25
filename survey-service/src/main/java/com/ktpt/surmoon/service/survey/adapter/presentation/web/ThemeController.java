@@ -1,8 +1,7 @@
 package com.ktpt.surmoon.service.survey.adapter.presentation.web;
 
 import com.ktpt.surmoon.service.survey.application.ThemeService;
-import com.ktpt.surmoon.service.survey.application.dto.ThemeRequest;
-import com.ktpt.surmoon.service.survey.application.dto.ThemeResponse;
+import com.ktpt.surmoon.service.survey.application.dto.ThemeDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +17,8 @@ public class ThemeController {
     private final ThemeService themeService;
 
     @PutMapping("/{id}")
-    public ResponseEntity<ThemeResponse> update(@PathVariable Long id, @RequestBody @Valid ThemeRequest request) {
-        ThemeResponse response = themeService.update(id, request);
+    public ResponseEntity<ThemeDTO.ThemeResponse> update(@PathVariable Long id, @RequestBody @Valid ThemeDTO.ThemeRequest request) {
+        ThemeDTO.ThemeResponse response = themeService.update(id, request);
 
         return ResponseEntity.ok(response);
     }

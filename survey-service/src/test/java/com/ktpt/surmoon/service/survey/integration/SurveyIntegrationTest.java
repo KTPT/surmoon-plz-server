@@ -2,10 +2,7 @@ package com.ktpt.surmoon.service.survey.integration;
 
 import com.ktpt.surmoon.service.survey.adapter.presentation.advice.ErrorResponse;
 import com.ktpt.surmoon.service.survey.adapter.presentation.web.SurveyController;
-import com.ktpt.surmoon.service.survey.application.dto.SurveyCreateRequest;
-import com.ktpt.surmoon.service.survey.application.dto.SurveyCreateResponse;
-import com.ktpt.surmoon.service.survey.application.dto.SurveyRequest;
-import com.ktpt.surmoon.service.survey.application.dto.SurveyResponse;
+import com.ktpt.surmoon.service.survey.application.dto.SurveyDTO;
 import com.ktpt.surmoon.service.survey.domain.model.member.Member;
 import com.ktpt.surmoon.service.survey.domain.model.survey.Survey;
 import org.junit.jupiter.api.DisplayName;
@@ -27,8 +24,8 @@ public class SurveyIntegrationTest extends IntegrationTest {
         Member creator = findAnyMember();
 
         // when
-        SurveyCreateRequest request = new SurveyCreateRequest("title", "thumbnail", "mainColor", "backgroundColor", "fontStyle");
-        SurveyCreateResponse response = postWithLogin(request, SurveyController.SURVEY_URI, SurveyCreateResponse.class, creator.getId());
+        SurveyDTO.SurveyCreateRequest request = new SurveyDTO.SurveyCreateRequest("title", "thumbnail", "mainColor", "backgroundColor", "fontStyle");
+        SurveyDTO.SurveyCreateResponse response = postWithLogin(request, SurveyController.SURVEY_URI, SurveyDTO.SurveyCreateResponse.class, creator.getId());
 
         // then
         assertAll(
@@ -45,7 +42,7 @@ public class SurveyIntegrationTest extends IntegrationTest {
     @Test
     void createSurveyFails() {
         // when
-        SurveyCreateRequest request = new SurveyCreateRequest("", "", "", "", "");
+        SurveyDTO.SurveyCreateRequest request = new SurveyDTO.SurveyCreateRequest("", "", "", "", "");
         ErrorResponse response = postFailsWithLogin(request, SurveyController.SURVEY_URI, -1L);
 
         // then
@@ -61,8 +58,8 @@ public class SurveyIntegrationTest extends IntegrationTest {
         Survey saved = findAnySurvey();
 
         // when
-        SurveyRequest request = new SurveyRequest("changed");
-        SurveyResponse response = putWithLogin(request, SurveyController.SURVEY_URI, saved.getId(), SurveyResponse.class, saved.getCreatorId());
+        SurveyDTO.SurveyUpdateRequest request = new SurveyDTO.SurveyUpdateRequest("changed");
+        SurveyDTO.SurveyResponse response = putWithLogin(request, SurveyController.SURVEY_URI, saved.getId(), SurveyDTO.SurveyResponse.class, saved.getCreatorId());
 
         // then
         assertAll(
@@ -84,7 +81,7 @@ public class SurveyIntegrationTest extends IntegrationTest {
         return Stream.of(
                 DynamicTest.dynamicTest("같은 title로 수정시 BadRequest", () -> {
                     // when
-                    SurveyRequest request = new SurveyRequest(saved.getTitle());
+                    SurveyDTO.SurveyUpdateRequest request = new SurveyDTO.SurveyUpdateRequest(saved.getTitle());
                     ErrorResponse response = putFailsWithLogin(request, SurveyController.SURVEY_URI + "/" + saved.getId(), saved.getCreatorId());
 
                     // then
@@ -92,7 +89,7 @@ public class SurveyIntegrationTest extends IntegrationTest {
                 }),
                 DynamicTest.dynamicTest("creatorId가 다를때 BadRequest", () -> {
                     // when
-                    SurveyRequest request = new SurveyRequest("changed");
+                    SurveyDTO.SurveyUpdateRequest request = new SurveyDTO.SurveyUpdateRequest("changed");
                     ErrorResponse response = putFailsWithLogin(request, SurveyController.SURVEY_URI + "/" + saved.getId(), noCreator.getId());
 
                     // then
