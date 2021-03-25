@@ -75,7 +75,6 @@ public class IntegrationTest {
         try {
             String token = tokenProvider.createToken(memberId);
             String body = objectMapper.writeValueAsString(request);
-            System.out.println(token);
 
             MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(uri)
                     .contentType(MediaType.APPLICATION_JSON)

@@ -31,7 +31,6 @@ public class TokenProvider {
             Jws<Claims> claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
             return claims.getBody();
         } catch (MalformedJwtException | SignatureException | UnsupportedJwtException | IllegalArgumentException e) {
-            System.out.println(e.getMessage());
             throw new InvalidTokenException("유효하지 않은 토큰");
         } catch (ExpiredJwtException e) {
             throw new InvalidTokenException("만료된 토큰.");
