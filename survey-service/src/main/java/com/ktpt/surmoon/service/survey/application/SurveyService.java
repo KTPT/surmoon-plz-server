@@ -1,6 +1,7 @@
 package com.ktpt.surmoon.service.survey.application;
 
-import com.ktpt.surmoon.service.survey.application.dto.*;
+import com.ktpt.surmoon.service.survey.application.dto.SurveyDTO;
+import com.ktpt.surmoon.service.survey.application.dto.ThemeDTO;
 import com.ktpt.surmoon.service.survey.domain.model.survey.Survey;
 import com.ktpt.surmoon.service.survey.domain.model.survey.SurveyRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,17 +15,17 @@ public class SurveyService {
     private final ThemeService themeService;
 
     @Transactional
-    public SurveyCreateResponse save(SurveyCreateRequest request) {
-        Survey saved = surveyRepository.save(request.toSurvey());
-        ThemeResponse themeResponse = themeService.save(ThemeRequest.of(saved.getId(), request));
-        return SurveyCreateResponse.of(saved, themeResponse);
+    public SurveyDTO.SurveyCreateResponse save(SurveyDTO.SurveyCreateRequest request, Long creatorId) {
+        Survey saved = surveyRepository.save(request.toSurvey(creatorId));
+        ThemeDTO.ThemeResponse themeResponse = themeService.save(ThemeDTO.ThemeRequest.of(saved.getId(), request));
+        return SurveyDTO.SurveyCreateResponse.of(saved, themeResponse);
     }
 
-    public SurveyResponse update(Long id, SurveyRequest request) {
+    public SurveyDTO.SurveyResponse update(Long id, SurveyDTO.SurveyUpdateRequest request, Long creatorId) {
         Survey survey = findById(id);
-        survey.changeTitleWhoCreator(request.getTitle(), request.getCreatorId());
+        survey.changeTitleWhoCreator(request.getTitle(), creatorId);
 
-        return SurveyResponse.from(surveyRepository.save(survey));
+        return SurveyDTO.SurveyResponse.from(surveyRepository.save(survey));
     }
 
     private Survey findById(Long id) {

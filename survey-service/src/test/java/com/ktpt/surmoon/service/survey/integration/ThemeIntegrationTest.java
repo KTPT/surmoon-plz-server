@@ -1,8 +1,7 @@
 package com.ktpt.surmoon.service.survey.integration;
 
-import com.ktpt.surmoon.service.survey.adapter.presentation.ThemeController;
-import com.ktpt.surmoon.service.survey.application.dto.ThemeRequest;
-import com.ktpt.surmoon.service.survey.application.dto.ThemeResponse;
+import com.ktpt.surmoon.service.survey.adapter.presentation.web.ThemeController;
+import com.ktpt.surmoon.service.survey.application.dto.ThemeDTO;
 import com.ktpt.surmoon.service.survey.domain.model.theme.Theme;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,8 +18,8 @@ public class ThemeIntegrationTest extends IntegrationTest {
         Theme theme = findAnyTheme();
 
         // when
-        ThemeRequest request = new ThemeRequest(theme.getSurveyId(), "test", "test", "test", "test");
-        ThemeResponse response = put(request, ThemeController.THEME_URI, theme.getId(), ThemeResponse.class);
+        ThemeDTO.ThemeRequest request = new ThemeDTO.ThemeRequest(theme.getSurveyId(), "test", "test", "test", "test");
+        ThemeDTO.ThemeResponse response = put(request, ThemeController.THEME_URI, theme.getId(), ThemeDTO.ThemeResponse.class);
 
         // then
         assertAll(

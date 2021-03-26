@@ -1,6 +1,7 @@
 package com.ktpt.surmoon.service.survey.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ktpt.surmoon.service.survey.adapter.infrastructure.jwt.TokenProvider;
 import com.ktpt.surmoon.service.survey.adapter.presentation.advice.ErrorResponse;
 import com.ktpt.surmoon.service.survey.domain.model.member.Member;
 import com.ktpt.surmoon.service.survey.domain.model.member.MemberRepository;
@@ -23,10 +24,12 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public class IntegrationTest {
+    private static final String BEARER = "bearer ";
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
@@ -38,6 +41,8 @@ public class IntegrationTest {
     private SurveyRepository surveyRepository;
     @Autowired
     private ThemeRepository themeRepository;
+    @Autowired
+    private TokenProvider tokenProvider;
 
     @BeforeEach
     void setUp() {
@@ -55,6 +60,27 @@ public class IntegrationTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .content(body))
+                    .andExpect(MockMvcResultMatchers.status().isCreated())
+                    .andExpect(MockMvcResultMatchers.header().string(HttpHeaders.LOCATION, Matchers.matchesRegex(uri + "/\\d*")))
+                    .andReturn();
+
+            return objectMapper.readValue(result.getResponse().getContentAsString(), response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AssertionError("test fails");
+        }
+    }
+
+    protected <T, U> U postWithLogin(T request, String uri, Class<U> response, Long memberId) {
+        try {
+            String token = tokenProvider.createToken(memberId);
+            String body = objectMapper.writeValueAsString(request);
+
+            MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(uri)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(body)
+                    .header(AUTHORIZATION, BEARER + token))
                     .andExpect(MockMvcResultMatchers.status().isCreated())
                     .andExpect(MockMvcResultMatchers.header().string(HttpHeaders.LOCATION, Matchers.matchesRegex(uri + "/\\d*")))
                     .andReturn();
@@ -84,6 +110,26 @@ public class IntegrationTest {
         }
     }
 
+    protected <T> ErrorResponse postFailsWithLogin(T request, String uri, Long memberId) {
+        try {
+            String token = tokenProvider.createToken(memberId);
+            String body = objectMapper.writeValueAsString(request);
+
+            MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(uri)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(body)
+                    .header(AUTHORIZATION, BEARER + token))
+                    .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                    .andReturn();
+
+            return objectMapper.readValue(result.getResponse().getContentAsString(), ErrorResponse.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AssertionError("test fails");
+        }
+    }
+
     protected <T, U> U put(T request, String uri, Long resourceId, Class<U> response) {
         try {
             String body = objectMapper.writeValueAsString(request);
@@ -102,6 +148,26 @@ public class IntegrationTest {
         }
     }
 
+    protected <T, U> U putWithLogin(T request, String uri, Long resourceId, Class<U> response, Long memberId) {
+        try {
+            String token = tokenProvider.createToken(memberId);
+            String body = objectMapper.writeValueAsString(request);
+
+            MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put(uri + "/" + resourceId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(body)
+                    .header(AUTHORIZATION, BEARER + token))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andReturn();
+
+            return objectMapper.readValue(result.getResponse().getContentAsString(), response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AssertionError("test fails");
+        }
+    }
+
     protected <T> ErrorResponse putFails(T request, String uri) {
         try {
             String body = objectMapper.writeValueAsString(request);
@@ -110,6 +176,26 @@ public class IntegrationTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .content(body))
+                    .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                    .andReturn();
+
+            return objectMapper.readValue(result.getResponse().getContentAsString(), ErrorResponse.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AssertionError("test fails");
+        }
+    }
+
+    protected <T> ErrorResponse putFailsWithLogin(T request, String uri, Long memberId) {
+        try {
+            String token = tokenProvider.createToken(memberId);
+            String body = objectMapper.writeValueAsString(request);
+
+            MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put(uri)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(body)
+                    .header(AUTHORIZATION, BEARER + token))
                     .andExpect(MockMvcResultMatchers.status().isBadRequest())
                     .andReturn();
 
