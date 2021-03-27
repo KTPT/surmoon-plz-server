@@ -52,16 +52,14 @@ public class Section {
 
     private void verifySurveyId(Long surveyId) {
         if (!this.surveyId.equals(surveyId)) {
-            throw new IllegalArgumentException("해당 survey가 아닙니다, surveyId : " + surveyId);
+            throw new IllegalArgumentException(
+                "수정할 survey와 일치하지 않습니다, 수정할 surveyId: " + this.surveyId + "입력 받은 surveyId : " + surveyId);
         }
     }
 
     private void verifyContentsAreSame(String title, String description) {
-        if (this.title.equals(title)) {
-            throw new IllegalArgumentException("동일한 title로 변경할 수 없습니다.");
-        }
-        if (this.description.equals(description)) {
-            throw new IllegalArgumentException("동일한 description으로 변경할 수 없습니다.");
+        if (this.title.equals(title) && this.description.equals(description)) {
+            throw new IllegalArgumentException("동일한 title 혹은 description으로 변경할 수 없습니다.");
         }
     }
 

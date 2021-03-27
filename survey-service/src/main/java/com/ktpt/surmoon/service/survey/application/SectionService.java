@@ -20,10 +20,12 @@ public class SectionService {
 
     @Transactional
     public SectionResponse save(SectionRequest request) {
-        Section section = sectionSequenceService.insertSequence(request);
-        return SectionResponse.from(sectionRepository.save(section));
-    }
+        Long tempPreviousSectionId = -1L;
+        Section created = sectionRepository.save(request.toEntity(tempPreviousSectionId));
+        sectionSequenceService.insertSequence(created, request.getPreviousSectionId(), request.getSurveyId());
 
+        return SectionResponse.from(sectionRepository.save(created));
+    }
     public SectionResponse updateContent(Long id, SectionUpdateContentRequest request) {
         Section section = findById(id);
         section.updateContent(request.getSurveyId(), request.getTitle(), request.getDescription());

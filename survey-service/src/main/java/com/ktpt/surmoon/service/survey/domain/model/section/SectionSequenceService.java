@@ -4,13 +4,19 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.ktpt.surmoon.service.survey.application.dto.SectionRequest;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
 public class SectionSequenceService {
     private final SectionRepository sectionRepository;
+
+    public void insertSequence(Section created, Long previousSectionId, Long surveyId) {
+        sectionRepository.findOptionalByPreviousSectionId(previousSectionId)
+            .ifPresent(it -> it.updatePreviousSectionId(created.getId(), surveyId));
+
+        created.updatePreviousSectionId(previousSectionId, surveyId);
+    }
 
     public void updateSequence(Section target, Long previousSectionId, Long surveyId) {
         Section atDestination = findByPreviousSectionId(previousSectionId);
@@ -20,15 +26,6 @@ public class SectionSequenceService {
             sectionRepository.save(it.updatePreviousSectionId(target.getPreviousSectionId(), surveyId)));
         sectionRepository.save(atDestination.updatePreviousSectionId(target.getId(), surveyId));
         target.updatePreviousSectionId(previousSectionId, surveyId);
-    }
-
-    public Section insertSequence(SectionRequest request) {
-        Section section = sectionRepository.save(request.toEntity(-1L));
-
-        sectionRepository.findOptionalByPreviousSectionId(request.getPreviousSectionId())
-            .ifPresent(it -> it.updatePreviousSectionId(section.getId(), request.getSurveyId()));
-
-        return section.updatePreviousSectionId(request.getPreviousSectionId(), request.getSurveyId());
     }
 
     private Section findByPreviousSectionId(Long previousSectionId) {
