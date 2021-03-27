@@ -164,7 +164,7 @@ public class SectionIntegrationTest extends IntegrationTest {
             SectionController.SECTION_URI + "/" + section.getId() + "/content");
 
         //then
-        assertThat(response.getMessages()).contains("동일한 title로 변경할 수 없습니다.");
+        assertThat(response.getMessages()).contains("동일한 title 혹은 description으로 변경할 수 없습니다.");
     }
 
     @DisplayName("섹션 삭제")

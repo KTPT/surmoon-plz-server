@@ -12,10 +12,11 @@ public class SectionSequenceService {
     private final SectionRepository sectionRepository;
 
     public void insertSequence(Section created, Long previousSectionId, Long surveyId) {
-        sectionRepository.findOptionalByPreviousSectionId(previousSectionId)
+        sectionRepository.findAllByPreviousSectionId(previousSectionId)
+            .stream()
+            .filter(section -> !section.getId().equals(created.getId()))
+            .findAny()
             .ifPresent(it -> it.updatePreviousSectionId(created.getId(), surveyId));
-
-        created.updatePreviousSectionId(previousSectionId, surveyId);
     }
 
     public void updateSequence(Section target, Long previousSectionId, Long surveyId) {

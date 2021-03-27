@@ -20,8 +20,7 @@ public class SectionService {
 
     @Transactional
     public SectionResponse save(SectionRequest request) {
-        Long tempPreviousSectionId = -1L;
-        Section created = sectionRepository.save(request.toEntity(tempPreviousSectionId));
+        Section created = sectionRepository.save(request.toEntity());
         sectionSequenceService.insertSequence(created, request.getPreviousSectionId(), request.getSurveyId());
 
         return SectionResponse.from(sectionRepository.save(created));
