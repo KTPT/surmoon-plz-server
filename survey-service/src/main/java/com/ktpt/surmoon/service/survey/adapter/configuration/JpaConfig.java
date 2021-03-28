@@ -1,4 +1,4 @@
-package com.ktpt.surmoon.service.survey.config;
+package com.ktpt.surmoon.service.survey.adapter.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

@@ -1,4 +1,4 @@
-package com.ktpt.surmoon.service.survey.adapter.presentation;
+package com.ktpt.surmoon.service.survey.adapter.presentation.web;
 
 import java.net.URI;
 
@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ktpt.surmoon.service.survey.application.SectionService;
-import com.ktpt.surmoon.service.survey.application.dto.SectionRequest;
-import com.ktpt.surmoon.service.survey.application.dto.SectionResponse;
-import com.ktpt.surmoon.service.survey.application.dto.SectionUpdateContentRequest;
-import com.ktpt.surmoon.service.survey.application.dto.SectionUpdateSequenceRequest;
+import com.ktpt.surmoon.service.survey.application.dto.SectionDTO;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -29,23 +26,23 @@ public class SectionController {
     private final SectionService sectionService;
 
     @PostMapping
-    public ResponseEntity<SectionResponse> create(@RequestBody @Valid SectionRequest request) {
-        SectionResponse saved = sectionService.save(request);
+    public ResponseEntity<SectionDTO.SectionResponse> create(@RequestBody @Valid SectionDTO.SectionRequest request) {
+        SectionDTO.SectionResponse saved = sectionService.save(request);
         return ResponseEntity.created(URI.create(SECTION_URI + "/" + saved.getId()))
             .body(saved);
     }
 
     @PatchMapping("/{id}/content")
-    public ResponseEntity<SectionResponse> updateContent(@PathVariable Long id,
-        @RequestBody @Valid SectionUpdateContentRequest request) {
-        SectionResponse response = sectionService.updateContent(id, request);
+    public ResponseEntity<SectionDTO.SectionResponse> updateContent(@PathVariable Long id,
+        @RequestBody @Valid SectionDTO.SectionUpdateContentRequest request) {
+        SectionDTO.SectionResponse response = sectionService.updateContent(id, request);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/sequence")
-    public ResponseEntity<SectionResponse> updateSequence(@PathVariable Long id,
-        @RequestBody @Valid SectionUpdateSequenceRequest request) {
-        SectionResponse response = sectionService.updateSequence(id, request);
+    public ResponseEntity<SectionDTO.SectionResponse> updateSequence(@PathVariable Long id,
+        @RequestBody @Valid SectionDTO.SectionUpdateSequenceRequest request) {
+        SectionDTO.SectionResponse response = sectionService.updateSequence(id, request);
         return ResponseEntity.ok(response);
     }
 

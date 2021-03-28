@@ -8,12 +8,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.ktpt.surmoon.service.survey.adapter.presentation.SectionController;
 import com.ktpt.surmoon.service.survey.adapter.presentation.advice.ErrorResponse;
-import com.ktpt.surmoon.service.survey.application.dto.SectionRequest;
-import com.ktpt.surmoon.service.survey.application.dto.SectionResponse;
-import com.ktpt.surmoon.service.survey.application.dto.SectionUpdateContentRequest;
-import com.ktpt.surmoon.service.survey.application.dto.SectionUpdateSequenceRequest;
+import com.ktpt.surmoon.service.survey.adapter.presentation.web.SectionController;
+import com.ktpt.surmoon.service.survey.application.dto.SectionDTO;
 import com.ktpt.surmoon.service.survey.domain.model.section.Section;
 import com.ktpt.surmoon.service.survey.domain.model.survey.Survey;
 
@@ -38,8 +35,10 @@ public class SectionIntegrationTest extends IntegrationTest {
         Section section2 = createFixture(section1.getId());
 
         //when
-        SectionRequest request = new SectionRequest(survey.getId(), section1.getId(), title, description);
-        SectionResponse response = post(request, SectionController.SECTION_URI, SectionResponse.class);
+        SectionDTO.SectionRequest request = new SectionDTO.SectionRequest(survey.getId(), section1.getId(), title,
+            description);
+        SectionDTO.SectionResponse response = post(request, SectionController.SECTION_URI,
+            SectionDTO.SectionResponse.class);
 
         Section findSection1 = getById(section1.getId());
         Section findSection2 = getById(section2.getId());
@@ -64,7 +63,8 @@ public class SectionIntegrationTest extends IntegrationTest {
         Long surveyIdDoesNotExist = -1L;
 
         //when
-        SectionRequest request = new SectionRequest(surveyIdDoesNotExist, 0L, "title", "description");
+        SectionDTO.SectionRequest request = new SectionDTO.SectionRequest(surveyIdDoesNotExist, 0L, "title",
+            "description");
         ErrorResponse errorResponse = postFails(request, SectionController.SECTION_URI);
 
         //then
@@ -81,10 +81,11 @@ public class SectionIntegrationTest extends IntegrationTest {
         Section section = getById(createFixture(0L).getId());
 
         //when
-        SectionUpdateContentRequest request = new SectionUpdateContentRequest(survey.getId(), updatedTitle,
+        SectionDTO.SectionUpdateContentRequest request = new SectionDTO.SectionUpdateContentRequest(survey.getId(),
+            updatedTitle,
             updatedDescription);
-        SectionResponse response = patch(request, SectionController.SECTION_URI, section.getId(), "content",
-            SectionResponse.class);
+        SectionDTO.SectionResponse response = patch(request, SectionController.SECTION_URI, section.getId(), "content",
+            SectionDTO.SectionResponse.class);
 
         //then
         assertThat(response.getId()).isEqualTo(section.getId());
@@ -104,9 +105,11 @@ public class SectionIntegrationTest extends IntegrationTest {
         Section section3 = createFixture(section2.getId());
 
         //when
-        SectionUpdateSequenceRequest request = new SectionUpdateSequenceRequest(survey.getId(), section1.getId());
-        SectionResponse response = patch(request, SectionController.SECTION_URI, section3.getId(), "sequence",
-            SectionResponse.class);
+        SectionDTO.SectionUpdateSequenceRequest request = new SectionDTO.SectionUpdateSequenceRequest(survey.getId(),
+            section1.getId());
+        SectionDTO.SectionResponse response = patch(request, SectionController.SECTION_URI, section3.getId(),
+            "sequence",
+            SectionDTO.SectionResponse.class);
 
         Section findSection1 = getById(section1.getId());
         Section findSection2 = getById(section2.getId());
@@ -132,9 +135,11 @@ public class SectionIntegrationTest extends IntegrationTest {
         Section section4 = createFixture(section3.getId());
 
         //when
-        SectionUpdateSequenceRequest request = new SectionUpdateSequenceRequest(survey.getId(), section1.getId());
-        SectionResponse response = patch(request, SectionController.SECTION_URI, section3.getId(), "sequence",
-            SectionResponse.class);
+        SectionDTO.SectionUpdateSequenceRequest request = new SectionDTO.SectionUpdateSequenceRequest(survey.getId(),
+            section1.getId());
+        SectionDTO.SectionResponse response = patch(request, SectionController.SECTION_URI, section3.getId(),
+            "sequence",
+            SectionDTO.SectionResponse.class);
 
         Section findSection1 = getById(section1.getId());
         Section findSection2 = getById(section2.getId());
@@ -159,12 +164,13 @@ public class SectionIntegrationTest extends IntegrationTest {
         Section section = getById(createFixture(0L).getId());
 
         //when
-        SectionUpdateContentRequest request = new SectionUpdateContentRequest(survey.getId(), "title", "description");
+        SectionDTO.SectionUpdateContentRequest request = new SectionDTO.SectionUpdateContentRequest(survey.getId(),
+            "title", "description");
         ErrorResponse response = patchFails(request,
             SectionController.SECTION_URI + "/" + section.getId() + "/content");
 
         //then
-        assertThat(response.getMessages()).contains("동일한 title 혹은 description으로 변경할 수 없습니다.");
+        assertThat(response.getMessages()).contains("동일한 title 과 description으로 변경할 수 없습니다.");
     }
 
     @DisplayName("섹션 삭제")
