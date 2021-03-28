@@ -1,11 +1,11 @@
 package com.ktpt.surmoon.service.survey.application.dto;
 
+import javax.validation.constraints.NotBlank;
+
 import com.ktpt.surmoon.service.survey.adapter.infrastructure.validation.SurveyShouldExist;
 import com.ktpt.surmoon.service.survey.domain.model.theme.Theme;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
 
 public class ThemeDTO {
     @Getter
@@ -27,7 +27,8 @@ public class ThemeDTO {
         }
 
         public static ThemeRequest of(Long surveyId, SurveyDTO.SurveyCreateRequest request) {
-            return new ThemeRequest(surveyId, request.getThumbnail(), request.getMainColor(), request.getBackgroundColor(), request.getFontStyle());
+            return new ThemeRequest(surveyId, request.getThumbnail(), request.getMainColor(),
+                request.getBackgroundColor(), request.getFontStyle());
         }
 
         public Theme toEntity() {
@@ -50,7 +51,8 @@ public class ThemeDTO {
         }
 
         public static ThemeResponse from(Theme theme) {
-            return new ThemeResponse(theme.getId(), theme.getSurveyId(), theme.getThumbnail(), theme.getMainColor(), theme.getBackgroundColor(), theme.getFontStyle());
+            return new ThemeResponse(theme.getId(), theme.getSurveyId(), theme.getThumbnail(), theme.getMainColor(),
+                theme.getBackgroundColor(), theme.getFontStyle());
         }
     }
 }

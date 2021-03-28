@@ -1,10 +1,11 @@
 package com.ktpt.surmoon.service.survey.application;
 
+import org.springframework.stereotype.Service;
+
 import com.ktpt.surmoon.service.survey.application.dto.ThemeDTO;
 import com.ktpt.surmoon.service.survey.domain.model.theme.Theme;
 import com.ktpt.surmoon.service.survey.domain.model.theme.ThemeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
@@ -19,7 +20,8 @@ public class ThemeService {
 
     public ThemeDTO.ThemeResponse update(Long id, ThemeDTO.ThemeRequest request) {
         Theme theme = findById(id);
-        theme.update(request.getSurveyId(), request.getThumbnail(), request.getMainColor(), request.getBackgroundColor(), request.getFontStyle());
+        theme.update(request.getSurveyId(), request.getThumbnail(), request.getMainColor(),
+            request.getBackgroundColor(), request.getFontStyle());
 
         return ThemeDTO.ThemeResponse.from(themeRepository.save(theme));
     }

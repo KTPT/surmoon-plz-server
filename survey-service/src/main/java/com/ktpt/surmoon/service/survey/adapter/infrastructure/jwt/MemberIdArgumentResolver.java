@@ -1,8 +1,9 @@
 package com.ktpt.surmoon.service.survey.adapter.infrastructure.jwt;
 
-import com.ktpt.surmoon.service.survey.adapter.presentation.LoginMemberId;
-import com.ktpt.surmoon.service.survey.domain.model.member.MemberRepository;
-import lombok.RequiredArgsConstructor;
+import static org.springframework.http.HttpHeaders.*;
+
+import java.util.Objects;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -10,9 +11,9 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import java.util.Objects;
-
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import com.ktpt.surmoon.service.survey.adapter.presentation.LoginMemberId;
+import com.ktpt.surmoon.service.survey.domain.model.member.MemberRepository;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
@@ -31,7 +32,8 @@ public class MemberIdArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+        NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String[] authorizations = Objects.requireNonNull(webRequest.getHeader(AUTHORIZATION)).split(SP);
         String type = authorizations[TYPE_INDEX];
         String token = authorizations[TOKEN_INDEX];

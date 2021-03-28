@@ -1,11 +1,12 @@
 package com.ktpt.surmoon.service.survey.application.dto;
 
+import java.time.LocalDateTime;
+
+import javax.validation.constraints.NotBlank;
+
 import com.ktpt.surmoon.service.survey.domain.model.survey.Survey;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 
 public class SurveyDTO {
     @Getter
@@ -23,7 +24,8 @@ public class SurveyDTO {
         }
 
         public static SurveyCreateResponse of(Survey survey, ThemeDTO.ThemeResponse themeResponse) {
-            return new SurveyCreateResponse(survey.getId(), survey.getTitle(), survey.getCreatorId(), survey.getCreatedDate(), survey.getLastModifiedDate(), themeResponse);
+            return new SurveyCreateResponse(survey.getId(), survey.getTitle(), survey.getCreatorId(),
+                survey.getCreatedDate(), survey.getLastModifiedDate(), themeResponse);
         }
     }
 
@@ -64,7 +66,8 @@ public class SurveyDTO {
         }
 
         public static SurveyResponse from(Survey survey) {
-            return new SurveyResponse(survey.getId(), survey.getTitle(), survey.getCreatorId(), survey.getCreatedDate(), survey.getLastModifiedDate());
+            return new SurveyResponse(survey.getId(), survey.getTitle(), survey.getCreatorId(), survey.getCreatedDate(),
+                survey.getLastModifiedDate());
         }
     }
 
