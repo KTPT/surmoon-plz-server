@@ -59,7 +59,7 @@ public class Section {
 
     private void verifyContentsAreSame(String title, String description) {
         if (this.title.equals(title) && this.description.equals(description)) {
-            throw new IllegalArgumentException("동일한 title 혹은 description으로 변경할 수 없습니다.");
+            throw new IllegalArgumentException("동일한 title 과 description으로 변경할 수 없습니다.");
         }
     }
 
